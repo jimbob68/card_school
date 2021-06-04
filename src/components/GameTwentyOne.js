@@ -35,13 +35,33 @@ const GameTwentyOne = () => {
 			});
 	};
 
+	const calculateScore = (hand) => {
+		let score = 0;
+		let numberOfAces = 0;
+		hand.forEach((card) => {
+			if (card.value === 'KING' || card.value === 'QUEEN' || card.value === 'JACK') score += 10;
+			else if (card.value === 'ACE') {
+				numberOfAces += 1;
+				score += 11;
+				// if (score + 11 > 21) score += 1;
+				// else score += 11;
+			} else score += parseInt(card.value);
+		});
+		for (let i = 0; i < numberOfAces; i++) {
+			if (score > 21) score -= 10;
+		}
+		return score;
+	};
+
 	return (
 		<div>
 			<h1>Game Twenty-One</h1>
 			<button onClick={() => handleDrawCards()}>Deal</button>
+			{playerOneHand.length > 0 ? <button onClick={() => handleTwist()}>Twist</button> : null}
 			{displayCards(playerOneHand)}
+			{calculateScore(playerOneHand)}
 			{displayCards(computerHand)}
-			<button onClick={() => handleTwist()}>Twist</button>
+			{calculateScore(computerHand)}
 		</div>
 	);
 };
