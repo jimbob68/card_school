@@ -54,6 +54,21 @@ const GameTwentyOne = () => {
 		[ computerScore ]
 	);
 
+	useEffect(
+		() => {
+			setTimeout(() => {
+				if (calculateScore(playerOneHand) > 21 && playerNumberTurn === 1) {
+					alert('You are bust better luck next time!');
+					handleStick();
+				} else if (calculateScore(playerTwoHand) > 21 && playerNumberTurn === 2) {
+					alert('You are bust better luck next time!');
+					handleStick();
+				}
+			}, 500);
+		},
+		[ playerOneHand, playerTwoHand ]
+	);
+
 	const handleDrawCards = () => {
 		setPlayerNumberTurn(1);
 		fetch('https://deckofcardsapi.com/api/deck/' + deckId + '/draw/?count=' + (numberOfPlayers * 2 + 2))
@@ -110,6 +125,10 @@ const GameTwentyOne = () => {
 		for (let i = 0; i < numberOfAces; i++) {
 			if (score > 21) score -= 10;
 		}
+		// if (score > 21) {
+		// 	handleStick();
+		// 	alert('You are bust!!! Better luck next time.');
+		// }
 		return score;
 	};
 
