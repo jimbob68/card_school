@@ -3,42 +3,47 @@ import './GameTwentyOne.css';
 import backOfCard from '../assets/back_of_card.png';
 
 const GameTwentyOne = () => {
-	// let thing = [
-	// 	{
-	// 		code: '2S',
-	// 		image: 'https://deckofcardsapi.com/static/img/2S.png',
-	// 		images: {
-	// 			svg: 'https://deckofcardsapi.com/static/img/2S.svg',
-	// 			png: 'https://deckofcardsapi.com/static/img/2S.png'
-	// 		},
-	// 		value: '2',
-	// 		suit: 'SPADES'
-	// 	},
-	// 	{
-	// 		code: '2C',
-	// 		image: 'https://deckofcardsapi.com/static/img/2C.png',
-	// 		images: {
-	// 			svg: 'https://deckofcardsapi.com/static/img/2C.svg',
-	// 			png: 'https://deckofcardsapi.com/static/img/2C.png'
-	// 		},
-	// 		value: '2',
-	// 		suit: 'CLUBS'
-	// 	}
-	// ];
+	let thing = [
+		{
+			code: '2S',
+			image: 'https://deckofcardsapi.com/static/img/2S.png',
+			images: {
+				svg: 'https://deckofcardsapi.com/static/img/2S.svg',
+				png: 'https://deckofcardsapi.com/static/img/2S.png'
+			},
+			value: '2',
+			suit: 'SPADES'
+		},
+		{
+			code: '2C',
+			image: 'https://deckofcardsapi.com/static/img/2C.png',
+			images: {
+				svg: 'https://deckofcardsapi.com/static/img/2C.svg',
+				png: 'https://deckofcardsapi.com/static/img/2C.png'
+			},
+			value: '2',
+			suit: 'CLUBS'
+		}
+	];
 
 	const [ deckId, setDeckId ] = useState('');
-	const [ playerOneHand, setPlayerOneHand ] = useState([]);
+	// const [ playerOneHand, setPlayerOneHand ] = useState([]);
+	const [ playerOneHand, setPlayerOneHand ] = useState(thing);
 	const [ playerTwoHand, setPlayerTwoHand ] = useState([]);
 	const [ computerHand, setComputerHand ] = useState([]);
 	// const [ computerHand, setComputerHand ] = useState(thing);
 	const [ playerNumberTurn, setPlayerNumberTurn ] = useState(1);
 	const [ numberOfPlayers, setNumberOfPlayers ] = useState(2);
 	const [ computerScore, setComputerScore ] = useState(0);
+	const [ playerOneSplitHand, setPlayerOneSplitHand ] = useState([]);
 
 	useEffect(() => {
-		fetch('https://deckofcardsapi.com/api/deck/new/shuffle')
+		fetch('https://deckofcardsapi.com/api/deck/new/shuffle?deck_count=8')
 			.then((res) => res.json())
-			.then((results) => setDeckId(results.deck_id))
+			.then((results) => {
+				setDeckId(results.deck_id);
+				console.log('deck info', results);
+			})
 			.then(() => console.log('deck_id:', deckId));
 	}, []);
 
@@ -75,14 +80,32 @@ const GameTwentyOne = () => {
 		fetch('https://deckofcardsapi.com/api/deck/' + deckId + '/draw/?count=' + (numberOfPlayers * 2 + 2))
 			.then((res) => res.json())
 			.then((results) => {
-				setPlayerOneHand(results.cards.slice(0, 2));
+				// setPlayerOneHand(results.cards.slice(0, 2));
 				setPlayerTwoHand(results.cards.slice(2, 4));
 				setComputerHand(results.cards.slice(4));
 			});
 	};
 
-	const displayCards = (hand) => {
+	const handleSplit = (playerNumber) => {
+		if (playerNumber === 1) {
+			setPlayerOneSplitHand([ playerOneHand[1] ]);
+			setPlayerOneHand([ playerOneHand[0] ]);
+			handleTwist(1);
+			handleTwist(1.5);
+		}
+	};
+
+	const displayCards = (hand, playerNumber) => {
 		const cardImages = hand.map((card) => <img src={card.image} alt={card.code} />);
+
+		if (hand.length === 2 && hand[0].value === hand[1].value && playerNumberTurn !== 0) {
+			cardImages.push(<button onClick={() => handleSplit(playerNumberTurn)}>Split</button>);
+		}
+		if (playerNumber === 1 && playerOneSplitHand.length > 0) {
+			playerOneSplitHand.forEach((card) => {
+				cardImages.push(<img src={card.image} alt={card.code} />);
+			});
+		}
 		return cardImages;
 	};
 
@@ -108,6 +131,8 @@ const GameTwentyOne = () => {
 				} else if (player === 0) {
 					setComputerHand((computerHand) => [ ...computerHand, results.cards[0] ]);
 					// setComputerScore(computerScore + results.cards[0].value);
+				} else if (player === 1.5) {
+					setPlayerOneSplitHand((playerOneSplitHand) => [ ...playerOneSplitHand, results.cards[0] ]);
 				}
 				return results;
 			});
@@ -163,9 +188,9 @@ const GameTwentyOne = () => {
 			<button onClick={() => handleDrawCards()}>Deal</button>
 			{playerOneHand.length > 0 ? <button onClick={() => handleTwist(playerNumberTurn)}>Twist</button> : null}
 			{playerOneHand.length > 0 ? <button onClick={() => handleStick()}>Stick</button> : null}
-			{displayCards(playerOneHand)}
+			{displayCards(playerOneHand, 1)}
 			{calculateScore(playerOneHand, false)}
-			{displayCards(playerTwoHand)}
+			{displayCards(playerTwoHand, 2)}
 			{calculateScore(playerTwoHand, false)}
 			{computerHand.length > 0 && displayComputerCards()}
 			{computerHand.length > 0 && calculateScore(computerHand, true)}
