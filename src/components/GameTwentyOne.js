@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './GameTwentyOne.css';
+import backOfCard from '../assets/back_of_card.png';
 
 const GameTwentyOne = () => {
 	// let thing = [
@@ -85,6 +86,17 @@ const GameTwentyOne = () => {
 		return cardImages;
 	};
 
+	const displayComputerCards = () => {
+		let cardImages = [];
+		if (playerNumberTurn === 0) {
+			cardImages = computerHand.map((card) => <img src={card.image} alt={card.code} />);
+		} else {
+			cardImages.push(<img src={computerHand[0].image} alt={computerHand[0].code} />);
+			cardImages.push(<img src={backOfCard} alt="Back of card" />);
+		}
+		return cardImages;
+	};
+
 	const handleTwist = (player) => {
 		return fetch('https://deckofcardsapi.com/api/deck/' + deckId + '/draw/?count=1')
 			.then((res) => res.json())
@@ -110,9 +122,12 @@ const GameTwentyOne = () => {
 		}
 	};
 
-	const calculateScore = (hand) => {
+	const calculateScore = (hand, computerTurn) => {
 		let score = 0;
 		let numberOfAces = 0;
+		if (computerTurn && playerNumberTurn !== 0) {
+			hand = [ hand[0] ];
+		}
 		hand.forEach((card) => {
 			if (card.value === 'KING' || card.value === 'QUEEN' || card.value === 'JACK') score += 10;
 			else if (card.value === 'ACE') {
@@ -149,11 +164,11 @@ const GameTwentyOne = () => {
 			{playerOneHand.length > 0 ? <button onClick={() => handleTwist(playerNumberTurn)}>Twist</button> : null}
 			{playerOneHand.length > 0 ? <button onClick={() => handleStick()}>Stick</button> : null}
 			{displayCards(playerOneHand)}
-			{calculateScore(playerOneHand)}
+			{calculateScore(playerOneHand, false)}
 			{displayCards(playerTwoHand)}
-			{calculateScore(playerTwoHand)}
-			{displayCards(computerHand)}
-			{calculateScore(computerHand)}
+			{calculateScore(playerTwoHand, false)}
+			{computerHand.length > 0 && displayComputerCards()}
+			{computerHand.length > 0 && calculateScore(computerHand, true)}
 		</div>
 	);
 };
