@@ -75,6 +75,18 @@ const GameTwentyOne = () => {
 		[ playerOneHand, playerTwoHand ]
 	);
 
+	useEffect(
+		() => {
+			if (playerOneSplitHand.length === 1) {
+				handleTwist(1);
+				console.log('after twist 1');
+				handleTwist(1.5);
+				console.log('after twist 1.5');
+			}
+		},
+		[ playerOneSplitHand ]
+	);
+
 	const handleDrawCards = () => {
 		setPlayerNumberTurn(1);
 		fetch('https://deckofcardsapi.com/api/deck/' + deckId + '/draw/?count=' + (numberOfPlayers * 2 + 2))
@@ -90,8 +102,8 @@ const GameTwentyOne = () => {
 		if (playerNumber === 1) {
 			setPlayerOneSplitHand([ playerOneHand[1] ]);
 			setPlayerOneHand([ playerOneHand[0] ]);
-			handleTwist(1);
-			handleTwist(1.5);
+			// handleTwist(1);
+			// handleTwist(1.5);
 		}
 	};
 
@@ -102,9 +114,11 @@ const GameTwentyOne = () => {
 			cardImages.push(<button onClick={() => handleSplit(playerNumberTurn)}>Split</button>);
 		}
 		if (playerNumber === 1 && playerOneSplitHand.length > 0) {
+			cardImages.push(<p>first split hand score:{calculateScore(playerOneHand, false)}</p>);
 			playerOneSplitHand.forEach((card) => {
 				cardImages.push(<img src={card.image} alt={card.code} />);
 			});
+			cardImages.push(<p>second split hand score:{calculateScore(playerOneSplitHand, false)}</p>);
 		}
 		return cardImages;
 	};
@@ -134,6 +148,7 @@ const GameTwentyOne = () => {
 				} else if (player === 1.5) {
 					setPlayerOneSplitHand((playerOneSplitHand) => [ ...playerOneSplitHand, results.cards[0] ]);
 				}
+				console.log('in handleTwist, player= ', player);
 				return results;
 			});
 	};
