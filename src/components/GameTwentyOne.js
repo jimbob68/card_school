@@ -27,6 +27,7 @@ const GameTwentyOne = () => {
 	];
 
 	const [ deckId, setDeckId ] = useState('');
+	const [ deckOfCards, setDeckOfCards ] = useState([]);
 	// const [ playerOneHand, setPlayerOneHand ] = useState([]);
 	const [ playerOneHand, setPlayerOneHand ] = useState(thing);
 	const [ playerTwoHand, setPlayerTwoHand ] = useState([]);
@@ -50,11 +51,12 @@ const GameTwentyOne = () => {
 	useEffect(
 		() => {
 			if (computerScore <= 16 && playerNumberTurn === 0) {
-				handleTwist(0).then((res) => {
-					console.log(res);
-					computerHand.push(res.cards[0]);
-					setComputerScore(calculateScore(computerHand));
-				});
+				handleTwist(0);
+				// handleTwist(0).then((res) => {
+				// 	console.log(res);
+				// 	computerHand.push(res.cards[0]);
+				// 	setComputerScore(calculateScore(computerHand));
+				// });
 			}
 		},
 		[ computerScore ]
@@ -69,19 +71,24 @@ const GameTwentyOne = () => {
 				} else if (calculateScore(playerTwoHand) > 21 && playerNumberTurn === 2) {
 					alert('You are bust better luck next time!');
 					handleStick();
+				} else if (calculateScore(playerOneSplitHand) > 21 && playerNumberTurn === 1.5) {
+					alert('You are bust better luck next time!');
+					handleStick();
 				}
 			}, 500);
 		},
-		[ playerOneHand, playerTwoHand ]
+		[ playerOneHand, playerTwoHand, playerOneSplitHand ]
 	);
 
 	useEffect(
 		() => {
 			if (playerOneSplitHand.length === 1) {
-				handleTwist(1);
-				console.log('after twist 1');
+				// handleTwist(1);
+				// console.log('after twist 1');
 				handleTwist(1.5);
 				console.log('after twist 1.5');
+			} else if (playerOneSplitHand.length === 2) {
+				handleTwist(1);
 			}
 		},
 		[ playerOneSplitHand ]
@@ -89,12 +96,22 @@ const GameTwentyOne = () => {
 
 	const handleDrawCards = () => {
 		setPlayerNumberTurn(1);
-		fetch('https://deckofcardsapi.com/api/deck/' + deckId + '/draw/?count=' + (numberOfPlayers * 2 + 2))
+		fetch('https://deckofcardsapi.com/api/deck/' + deckId + '/draw/?count=416')
 			.then((res) => res.json())
 			.then((results) => {
-				// setPlayerOneHand(results.cards.slice(0, 2));
-				setPlayerTwoHand(results.cards.slice(2, 4));
-				setComputerHand(results.cards.slice(4));
+				let deck = results.cards;
+				setComputerHand(deck.slice(0, 2));
+				// setPlayerOneHand(deck.slice(2, 4));
+				if (numberOfPlayers === 1) {
+					setDeckOfCards(deck.slice(4));
+				}
+				if (numberOfPlayers > 1) {
+					setPlayerTwoHand(deck.slice(4, 6));
+					setDeckOfCards(deck.slice(6));
+				}
+
+				// setPlayerTwoHand(results.cards.slice(2, 4));
+				// setComputerHand(results.cards.slice(4));
 			});
 	};
 
@@ -134,26 +151,68 @@ const GameTwentyOne = () => {
 		return cardImages;
 	};
 
+	// const handleTwist = (player) => {
+	// 	return (
+	// 		fetch('https://deckofcardsapi.com/api/deck/' + deckId + '/draw/?count=1')
+	// 			.then((res) => {
+	// 				console.log('res', res);
+	// 				// console.log('res json', res.json());
+	// 				if (res.ok !== true) {
+	// 					// handleTwist(player);
+	// 					// return;
+	// 					console.log('BROKEN!!!!');
+	// 					return res.json();
+	// 				} else {
+	// 					return res.json();
+	// 				}
+	// 			})
+	// 			// .then((results) => {
+	// 			// 	console.log('fetch results', results);
+	// 			// 	if (results.success !== true) {
+	// 			// 		handleTwist(player);
+	// 			// 	} else {
+	// 			// 		return results;
+	// 			// 	}
+	// 			// })
+	// 			.then((results) => {
+	// 				if (player === 1) {
+	// 					setPlayerOneHand((playerOneHand) => [ ...playerOneHand, results.cards[0] ]);
+	// 				} else if (player === 2) {
+	// 					setPlayerTwoHand((playerTwoHand) => [ ...playerTwoHand, results.cards[0] ]);
+	// 				} else if (player === 0) {
+	// 					setComputerHand((computerHand) => [ ...computerHand, results.cards[0] ]);
+	// 					// setComputerScore(computerScore + results.cards[0].value);
+	// 				} else if (player === 1.5) {
+	// 					setPlayerOneSplitHand((playerOneSplitHand) => [ ...playerOneSplitHand, results.cards[0] ]);
+	// 				}
+	// 				console.log('in handleTwist, player= ', player);
+	// 				return results;
+	// 			})
+	// 	);
+	// };
+
 	const handleTwist = (player) => {
-		return fetch('https://deckofcardsapi.com/api/deck/' + deckId + '/draw/?count=1')
-			.then((res) => res.json())
-			.then((results) => {
-				if (player === 1) {
-					setPlayerOneHand((playerOneHand) => [ ...playerOneHand, results.cards[0] ]);
-				} else if (player === 2) {
-					setPlayerTwoHand((playerTwoHand) => [ ...playerTwoHand, results.cards[0] ]);
-				} else if (player === 0) {
-					setComputerHand((computerHand) => [ ...computerHand, results.cards[0] ]);
-					// setComputerScore(computerScore + results.cards[0].value);
-				} else if (player === 1.5) {
-					setPlayerOneSplitHand((playerOneSplitHand) => [ ...playerOneSplitHand, results.cards[0] ]);
-				}
-				console.log('in handleTwist, player= ', player);
-				return results;
-			});
+		if (player === 1) {
+			setPlayerOneHand((playerOneHand) => [ ...playerOneHand, deckOfCards[0] ]);
+		} else if (player === 2) {
+			setPlayerTwoHand((playerTwoHand) => [ ...playerTwoHand, deckOfCards[0] ]);
+		} else if (player === 0) {
+			setComputerHand((computerHand) => [ ...computerHand, deckOfCards[0] ]);
+
+			setComputerScore(computerScore + deckOfCards[0].value);
+		} else if (player === 1.5) {
+			setPlayerOneSplitHand((playerOneSplitHand) => [ ...playerOneSplitHand, deckOfCards[0] ]);
+		}
+		console.log('in handleTwist, player= ', player);
+		setDeckOfCards(deckOfCards.slice(1));
 	};
+
 	const handleStick = () => {
-		if (playerNumberTurn === numberOfPlayers) {
+		if (playerNumberTurn === 1 && playerOneSplitHand.length > 0) {
+			setPlayerNumberTurn(1.5);
+		} else if (playerNumberTurn === 1.5) {
+			setPlayerNumberTurn(2);
+		} else if (playerNumberTurn === numberOfPlayers) {
 			setPlayerNumberTurn(0);
 			setComputerScore(calculateScore(computerHand));
 			// handleComputerTurn();
