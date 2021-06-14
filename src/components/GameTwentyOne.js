@@ -96,23 +96,37 @@ const GameTwentyOne = () => {
 
 	const handleDrawCards = () => {
 		setPlayerNumberTurn(1);
-		fetch('https://deckofcardsapi.com/api/deck/' + deckId + '/draw/?count=416')
-			.then((res) => res.json())
-			.then((results) => {
-				let deck = results.cards;
-				setComputerHand(deck.slice(0, 2));
-				// setPlayerOneHand(deck.slice(2, 4));
-				if (numberOfPlayers === 1) {
-					setDeckOfCards(deck.slice(4));
-				}
-				if (numberOfPlayers > 1) {
-					setPlayerTwoHand(deck.slice(4, 6));
-					setDeckOfCards(deck.slice(6));
-				}
+		if (deckOfCards.length === 0) {
+			fetch('https://deckofcardsapi.com/api/deck/' + deckId + '/draw/?count=416')
+				.then((res) => res.json())
+				.then((results) => {
+					let deck = results.cards;
+					setComputerHand(deck.slice(0, 2));
+					// setPlayerOneHand(deck.slice(2, 4));
+					if (numberOfPlayers === 1) {
+						setDeckOfCards(deck.slice(4));
+					}
+					if (numberOfPlayers > 1) {
+						setPlayerTwoHand(deck.slice(4, 6));
+						setDeckOfCards(deck.slice(6));
+					}
 
-				// setPlayerTwoHand(results.cards.slice(2, 4));
-				// setComputerHand(results.cards.slice(4));
-			});
+					// setPlayerTwoHand(results.cards.slice(2, 4));
+					// setComputerHand(results.cards.slice(4));
+				});
+		} else {
+			setPlayerOneSplitHand([]);
+			let deck = deckOfCards;
+			setComputerHand(deck.slice(0, 2));
+			setPlayerOneHand(deck.slice(2, 4));
+			if (numberOfPlayers === 1) {
+				setDeckOfCards(deck.slice(4));
+			}
+			if (numberOfPlayers > 1) {
+				setPlayerTwoHand(deck.slice(4, 6));
+				setDeckOfCards(deck.slice(6));
+			}
+		}
 	};
 
 	const handleSplit = (playerNumber) => {
