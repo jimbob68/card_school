@@ -26,13 +26,36 @@ const GameTwentyOne = () => {
 		}
 	];
 
+	let otherThing = [
+		{
+			code: 'AS',
+			image: 'https://deckofcardsapi.com/static/img/AS.png',
+			images: {
+				svg: 'https://deckofcardsapi.com/static/img/AS.svg',
+				png: 'https://deckofcardsapi.com/static/img/AS.png'
+			},
+			value: 'ACE',
+			suit: 'SPADES'
+		},
+		{
+			code: '2C',
+			image: 'https://deckofcardsapi.com/static/img/2C.png',
+			images: {
+				svg: 'https://deckofcardsapi.com/static/img/2C.svg',
+				png: 'https://deckofcardsapi.com/static/img/2C.png'
+			},
+			value: '2',
+			suit: 'CLUBS'
+		}
+	];
+
 	const [ deckId, setDeckId ] = useState('');
 	const [ deckOfCards, setDeckOfCards ] = useState([]);
 	// const [ playerOneHand, setPlayerOneHand ] = useState([]);
 	const [ playerOneHand, setPlayerOneHand ] = useState(thing);
 	const [ playerTwoHand, setPlayerTwoHand ] = useState([]);
-	const [ computerHand, setComputerHand ] = useState([]);
-	// const [ computerHand, setComputerHand ] = useState(thing);
+	// const [ computerHand, setComputerHand ] = useState([]);
+	const [ computerHand, setComputerHand ] = useState(otherThing);
 	const [ playerNumberTurn, setPlayerNumberTurn ] = useState(1);
 	const [ numberOfPlayers, setNumberOfPlayers ] = useState(2);
 	const [ computerScore, setComputerScore ] = useState(0);
@@ -51,7 +74,11 @@ const GameTwentyOne = () => {
 	useEffect(
 		() => {
 			if (computerScore <= 16 && playerNumberTurn === 0) {
-				handleTwist(0);
+				let cards = [ ...computerHand ];
+				const cardDrawn = handleTwist(0);
+				cards.push(cardDrawn);
+				setComputerScore(calculateScore(cards));
+
 				// handleTwist(0).then((res) => {
 				// 	console.log(res);
 				// 	computerHand.push(res.cards[0]);
@@ -59,7 +86,7 @@ const GameTwentyOne = () => {
 				// });
 			}
 		},
-		[ computerScore ]
+		[ computerHand, computerScore ]
 	);
 
 	useEffect(
@@ -101,7 +128,7 @@ const GameTwentyOne = () => {
 				.then((res) => res.json())
 				.then((results) => {
 					let deck = results.cards;
-					setComputerHand(deck.slice(0, 2));
+					// setComputerHand(deck.slice(0, 2));
 					// setPlayerOneHand(deck.slice(2, 4));
 					if (numberOfPlayers === 1) {
 						setDeckOfCards(deck.slice(4));
@@ -206,19 +233,20 @@ const GameTwentyOne = () => {
 	// };
 
 	const handleTwist = (player) => {
+		const cardDrawn = deckOfCards[0];
 		if (player === 1) {
 			setPlayerOneHand((playerOneHand) => [ ...playerOneHand, deckOfCards[0] ]);
 		} else if (player === 2) {
 			setPlayerTwoHand((playerTwoHand) => [ ...playerTwoHand, deckOfCards[0] ]);
 		} else if (player === 0) {
 			setComputerHand((computerHand) => [ ...computerHand, deckOfCards[0] ]);
-
-			setComputerScore(computerScore + deckOfCards[0].value);
+			// setComputerScore(computerScore + deckOfCards[0].value);
 		} else if (player === 1.5) {
 			setPlayerOneSplitHand((playerOneSplitHand) => [ ...playerOneSplitHand, deckOfCards[0] ]);
 		}
 		console.log('in handleTwist, player= ', player);
 		setDeckOfCards(deckOfCards.slice(1));
+		return cardDrawn;
 	};
 
 	const handleStick = () => {
