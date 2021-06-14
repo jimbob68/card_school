@@ -69,14 +69,19 @@ const GameTwentyOne = () => {
 				} else if (calculateScore(playerTwoHand) > 21 && playerNumberTurn === 2) {
 					alert('You are bust better luck next time!');
 					handleStick();
+					// add7
+				}else if (calculateScore(playerOneSplitHand) > 21 && playerNumberTurn === 1.5) {
+					alert('You are bust better luck next time!');
+					handleStick();
 				}
 			}, 500);
 		},
-		[ playerOneHand, playerTwoHand ]
+		[ playerOneHand, playerTwoHand, playerOneSplitHand ] //add7
 	);
 
 	const handleDrawCards = () => {
 		setPlayerNumberTurn(1);
+		setPlayerOneSplitHand([]) // add6
 		fetch('https://deckofcardsapi.com/api/deck/' + deckId + '/draw/?count=' + (numberOfPlayers * 2 + 2))
 			.then((res) => res.json())
 			.then((results) => {
@@ -90,10 +95,21 @@ const GameTwentyOne = () => {
 		if (playerNumber === 1) {
 			setPlayerOneSplitHand([ playerOneHand[1] ]);
 			setPlayerOneHand([ playerOneHand[0] ]);
+			//add4
+			// handleTwist(1);
+			// handleTwist(1.5);
+			//add4 end
+		}
+	};
+
+	//add3
+	useEffect(() =>{
+		if(playerOneSplitHand.length === 1){
 			handleTwist(1);
 			handleTwist(1.5);
 		}
-	};
+	}, [ playerOneSplitHand ])
+	//add3 end
 
 	const displayCards = (hand, playerNumber) => {
 		const cardImages = hand.map((card) => <img src={card.image} alt={card.code} />);
@@ -102,9 +118,12 @@ const GameTwentyOne = () => {
 			cardImages.push(<button onClick={() => handleSplit(playerNumberTurn)}>Split</button>);
 		}
 		if (playerNumber === 1 && playerOneSplitHand.length > 0) {
+			cardImages.push(<p>1st split Score: {calculateScore(playerOneHand, false)}</p>) //add1
 			playerOneSplitHand.forEach((card) => {
 				cardImages.push(<img src={card.image} alt={card.code} />);
 			});
+			cardImages.push(<p>2nd split Score: {calculateScore(playerOneSplitHand, false)}</p>) //add2
+
 		}
 		return cardImages;
 	};
@@ -138,7 +157,13 @@ const GameTwentyOne = () => {
 			});
 	};
 	const handleStick = () => {
-		if (playerNumberTurn === numberOfPlayers) {
+
+		//add5
+		if (playerNumberTurn === 1 && playerOneSplitHand.length > 0){
+			setPlayerNumberTurn(1.5)
+		}else if (playerNumberTurn === 1.5 && playerOneSplitHand.length > 0){
+			setPlayerNumberTurn(2)
+		}else if (playerNumberTurn === numberOfPlayers) {
 			setPlayerNumberTurn(0);
 			setComputerScore(calculateScore(computerHand));
 			// handleComputerTurn();
