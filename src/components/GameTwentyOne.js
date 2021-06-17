@@ -5,46 +5,46 @@ import backOfCard from '../assets/back_of_card.png';
 const GameTwentyOne = () => {
 	let thing = [
 		{
-			code: '2S',
-			image: 'https://deckofcardsapi.com/static/img/2S.png',
+			code: '0S',
+			image: 'https://deckofcardsapi.com/static/img/0S.png',
 			images: {
-				svg: 'https://deckofcardsapi.com/static/img/2S.svg',
-				png: 'https://deckofcardsapi.com/static/img/2S.png'
+				svg: 'https://deckofcardsapi.com/static/img/0S.svg',
+				png: 'https://deckofcardsapi.com/static/img/0S.png'
 			},
-			value: '2',
+			value: '10',
 			suit: 'SPADES'
 		},
 		{
-			code: '2C',
-			image: 'https://deckofcardsapi.com/static/img/2C.png',
+			code: '0C',
+			image: 'https://deckofcardsapi.com/static/img/0C.png',
 			images: {
-				svg: 'https://deckofcardsapi.com/static/img/2C.svg',
-				png: 'https://deckofcardsapi.com/static/img/2C.png'
+				svg: 'https://deckofcardsapi.com/static/img/0C.svg',
+				png: 'https://deckofcardsapi.com/static/img/0C.png'
 			},
-			value: '2',
+			value: '10',
 			suit: 'CLUBS'
 		}
 	];
 
 	let otherThing = [
 		{
-			code: '2S',
-			image: 'https://deckofcardsapi.com/static/img/2S.png',
+			code: '0S',
+			image: 'https://deckofcardsapi.com/static/img/0S.png',
 			images: {
-				svg: 'https://deckofcardsapi.com/static/img/2S.svg',
-				png: 'https://deckofcardsapi.com/static/img/2S.png'
+				svg: 'https://deckofcardsapi.com/static/img/0S.svg',
+				png: 'https://deckofcardsapi.com/static/img/0S.png'
 			},
-			value: '2',
+			value: '10',
 			suit: 'SPADES'
 		},
 		{
-			code: '2C',
-			image: 'https://deckofcardsapi.com/static/img/2C.png',
+			code: '0C',
+			image: 'https://deckofcardsapi.com/static/img/0C.png',
 			images: {
-				svg: 'https://deckofcardsapi.com/static/img/2C.svg',
-				png: 'https://deckofcardsapi.com/static/img/2C.png'
+				svg: 'https://deckofcardsapi.com/static/img/0C.svg',
+				png: 'https://deckofcardsapi.com/static/img/0C.png'
 			},
-			value: '2',
+			value: '10',
 			suit: 'CLUBS'
 		}
 	];
@@ -57,7 +57,7 @@ const GameTwentyOne = () => {
 	const [ computerHand, setComputerHand ] = useState([]);
 	// const [ computerHand, setComputerHand ] = useState(otherThing);
 	const [ playerNumberTurn, setPlayerNumberTurn ] = useState(1);
-	const [ numberOfPlayers, setNumberOfPlayers ] = useState(2);
+	const [ numberOfPlayers, setNumberOfPlayers ] = useState(1);
 	const [ computerScore, setComputerScore ] = useState(0);
 	const [ playerOneSplitHand, setPlayerOneSplitHand ] = useState([]);
 	const [ playerThreeHand, setPlayerThreeHand ] = useState([]);
@@ -89,6 +89,10 @@ const GameTwentyOne = () => {
 				// 	computerHand.push(res.cards[0]);
 				// 	setComputerScore(calculateScore(computerHand));
 				// });
+			} else if (playerNumberTurn === 0) {
+				setTimeout(() => {
+					handleEndRound();
+				}, 1000);
 			}
 		},
 		[ computerHand, computerScore ]
@@ -103,13 +107,37 @@ const GameTwentyOne = () => {
 				} else if (calculateScore(playerTwoHand) > 21 && playerNumberTurn === 2) {
 					alert('You are bust better luck next time!');
 					handleStick();
+				} else if (calculateScore(playerThreeHand) > 21 && playerNumberTurn === 3) {
+					alert('You are bust better luck next time!');
+					handleStick();
+				} else if (calculateScore(playerFourHand) > 21 && playerNumberTurn === 4) {
+					alert('You are bust better luck next time!');
+					handleStick();
 				} else if (calculateScore(playerOneSplitHand) > 21 && playerNumberTurn === 1.5) {
+					alert('You are bust better luck next time!');
+					handleStick();
+				} else if (calculateScore(playerTwoSplitHand) > 21 && playerNumberTurn === 2.5) {
+					alert('You are bust better luck next time!');
+					handleStick();
+				} else if (calculateScore(playerThreeSplitHand) > 21 && playerNumberTurn === 3.5) {
+					alert('You are bust better luck next time!');
+					handleStick();
+				} else if (calculateScore(playerFourSplitHand) > 21 && playerNumberTurn === 4.5) {
 					alert('You are bust better luck next time!');
 					handleStick();
 				}
 			}, 500);
 		},
-		[ playerOneHand, playerTwoHand, playerOneSplitHand ]
+		[
+			playerOneHand,
+			playerTwoHand,
+			playerThreeHand,
+			playerFourHand,
+			playerOneSplitHand,
+			playerTwoSplitHand,
+			playerThreeSplitHand,
+			playerFourSplitHand
+		]
 	);
 
 	useEffect(
@@ -397,15 +425,56 @@ const GameTwentyOne = () => {
 		return score;
 	};
 
-	// const handleComputerTurn = () => {
-	// 	let score = calculateScore(computerHand);
+	const handleEndRound = () => {
+		const playerOneScore = calculateScore(playerOneHand);
+		const playerTwoScore = calculateScore(playerTwoHand);
+		const playerThreeScore = calculateScore(playerThreeHand);
+		const playerFourScore = calculateScore(playerFourHand);
+		let computerWins = true;
 
-	// 	handleTwist(0).then((res) => console.log(res));
-	// 	// while (score <= 16) {
-	// 	// 	handleTwist(0);
-	// 	// 	score = calculateScore(computerHand);
-	// 	// }
-	// };
+		if ((playerOneScore > computerScore && playerOneScore <= 21) || (playerOneScore <= 21 && computerScore > 21)) {
+			computerWins = false;
+			alert('Player One beats the Dealer!');
+		} else if (playerOneScore === computerScore && playerOneScore <= 21) {
+			computerWins = false;
+			alert('Player One draws with the Dealer!');
+		}
+		if (
+			numberOfPlayers >= 2 &&
+			((playerTwoScore > computerScore && playerTwoScore <= 21) || (playerTwoScore <= 21 && computerScore > 21))
+		) {
+			computerWins = false;
+			alert('Player Two beats the Dealer!');
+		} else if (playerTwoScore === computerScore && playerTwoScore <= 21) {
+			computerWins = false;
+			alert('Player Two draws with the Dealer!');
+		}
+		if (
+			numberOfPlayers >= 3 &&
+			((playerThreeScore > computerScore && playerThreeScore <= 21) ||
+				(playerThreeScore <= 21 && computerScore > 21))
+		) {
+			computerWins = false;
+			alert('Player Three beats the Dealer!');
+		} else if (playerThreeScore === computerScore && playerThreeScore <= 21) {
+			computerWins = false;
+			alert('Player Three draws with the Dealer!');
+		}
+		if (
+			numberOfPlayers >= 4 &&
+			((playerFourScore > computerScore && playerFourScore <= 21) ||
+				(playerFourScore <= 21 && computerScore > 21))
+		) {
+			computerWins = false;
+			alert('Player Four beats the Dealer!');
+		} else if (playerFourScore === computerScore && playerFourScore <= 21) {
+			computerWins = false;
+			alert('Player Four draws with the Dealer!');
+		}
+		if (computerWins) {
+			alert('Dealer wins!');
+		}
+	};
 
 	return (
 		<div>
