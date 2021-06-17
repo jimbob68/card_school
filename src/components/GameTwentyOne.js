@@ -28,13 +28,13 @@ const GameTwentyOne = () => {
 
 	let otherThing = [
 		{
-			code: 'AS',
-			image: 'https://deckofcardsapi.com/static/img/AS.png',
+			code: '2S',
+			image: 'https://deckofcardsapi.com/static/img/2S.png',
 			images: {
-				svg: 'https://deckofcardsapi.com/static/img/AS.svg',
-				png: 'https://deckofcardsapi.com/static/img/AS.png'
+				svg: 'https://deckofcardsapi.com/static/img/2S.svg',
+				png: 'https://deckofcardsapi.com/static/img/2S.png'
 			},
-			value: 'ACE',
+			value: '2',
 			suit: 'SPADES'
 		},
 		{
@@ -51,15 +51,20 @@ const GameTwentyOne = () => {
 
 	const [ deckId, setDeckId ] = useState('');
 	const [ deckOfCards, setDeckOfCards ] = useState([]);
-	// const [ playerOneHand, setPlayerOneHand ] = useState([]);
-	const [ playerOneHand, setPlayerOneHand ] = useState(thing);
+	const [ playerOneHand, setPlayerOneHand ] = useState([]);
+	// const [ playerOneHand, setPlayerOneHand ] = useState(thing);
 	const [ playerTwoHand, setPlayerTwoHand ] = useState([]);
-	// const [ computerHand, setComputerHand ] = useState([]);
-	const [ computerHand, setComputerHand ] = useState(otherThing);
+	const [ computerHand, setComputerHand ] = useState([]);
+	// const [ computerHand, setComputerHand ] = useState(otherThing);
 	const [ playerNumberTurn, setPlayerNumberTurn ] = useState(1);
 	const [ numberOfPlayers, setNumberOfPlayers ] = useState(2);
 	const [ computerScore, setComputerScore ] = useState(0);
 	const [ playerOneSplitHand, setPlayerOneSplitHand ] = useState([]);
+	const [ playerThreeHand, setPlayerThreeHand ] = useState([]);
+	const [ playerFourHand, setPlayerFourHand ] = useState([]);
+	const [ playerTwoSplitHand, setPlayerTwoSplitHand ] = useState([]);
+	const [ playerThreeSplitHand, setPlayerThreeSplitHand ] = useState([]);
+	const [ playerFourSplitHand, setPlayerFourSplitHand ] = useState([]);
 
 	useEffect(() => {
 		fetch('https://deckofcardsapi.com/api/deck/new/shuffle?deck_count=8')
@@ -110,15 +115,45 @@ const GameTwentyOne = () => {
 	useEffect(
 		() => {
 			if (playerOneSplitHand.length === 1) {
-				// handleTwist(1);
-				// console.log('after twist 1');
 				handleTwist(1.5);
-				console.log('after twist 1.5');
 			} else if (playerOneSplitHand.length === 2) {
 				handleTwist(1);
 			}
 		},
 		[ playerOneSplitHand ]
+	);
+
+	useEffect(
+		() => {
+			if (playerTwoSplitHand.length === 1) {
+				handleTwist(2.5);
+			} else if (playerTwoSplitHand.length === 2) {
+				handleTwist(2);
+			}
+		},
+		[ playerTwoSplitHand ]
+	);
+
+	useEffect(
+		() => {
+			if (playerThreeSplitHand.length === 1) {
+				handleTwist(3.5);
+			} else if (playerThreeSplitHand.length === 2) {
+				handleTwist(3);
+			}
+		},
+		[ playerThreeSplitHand ]
+	);
+
+	useEffect(
+		() => {
+			if (playerFourSplitHand.length === 1) {
+				handleTwist(4.5);
+			} else if (playerFourSplitHand.length === 2) {
+				handleTwist(4);
+			}
+		},
+		[ playerFourSplitHand ]
 	);
 
 	const handleDrawCards = () => {
@@ -128,14 +163,25 @@ const GameTwentyOne = () => {
 				.then((res) => res.json())
 				.then((results) => {
 					let deck = results.cards;
-					// setComputerHand(deck.slice(0, 2));
-					// setPlayerOneHand(deck.slice(2, 4));
+					setComputerHand(deck.slice(0, 2));
+					setPlayerOneHand(deck.slice(2, 4));
 					if (numberOfPlayers === 1) {
 						setDeckOfCards(deck.slice(4));
 					}
-					if (numberOfPlayers > 1) {
+					if (numberOfPlayers === 2) {
 						setPlayerTwoHand(deck.slice(4, 6));
 						setDeckOfCards(deck.slice(6));
+					}
+					if (numberOfPlayers === 3) {
+						setPlayerTwoHand(deck.slice(4, 6));
+						setPlayerThreeHand(deck.slice(6, 8));
+						setDeckOfCards(deck.slice(8));
+					}
+					if (numberOfPlayers === 4) {
+						setPlayerTwoHand(deck.slice(4, 6));
+						setPlayerThreeHand(deck.slice(6, 8));
+						setPlayerFourHand(deck.slice(8, 10));
+						setDeckOfCards(deck.slice(10));
 					}
 
 					// setPlayerTwoHand(results.cards.slice(2, 4));
@@ -143,15 +189,29 @@ const GameTwentyOne = () => {
 				});
 		} else {
 			setPlayerOneSplitHand([]);
+			setPlayerTwoSplitHand([]);
+			setPlayerThreeSplitHand([]);
+			setPlayerFourSplitHand([]);
 			let deck = deckOfCards;
 			setComputerHand(deck.slice(0, 2));
 			setPlayerOneHand(deck.slice(2, 4));
 			if (numberOfPlayers === 1) {
 				setDeckOfCards(deck.slice(4));
 			}
-			if (numberOfPlayers > 1) {
+			if (numberOfPlayers === 2) {
 				setPlayerTwoHand(deck.slice(4, 6));
 				setDeckOfCards(deck.slice(6));
+			}
+			if (numberOfPlayers === 3) {
+				setPlayerTwoHand(deck.slice(4, 6));
+				setPlayerThreeHand(deck.slice(6, 8));
+				setDeckOfCards(deck.slice(8));
+			}
+			if (numberOfPlayers === 4) {
+				setPlayerTwoHand(deck.slice(4, 6));
+				setPlayerThreeHand(deck.slice(6, 8));
+				setPlayerFourHand(deck.slice(8, 10));
+				setDeckOfCards(deck.slice(10));
 			}
 		}
 	};
@@ -162,6 +222,15 @@ const GameTwentyOne = () => {
 			setPlayerOneHand([ playerOneHand[0] ]);
 			// handleTwist(1);
 			// handleTwist(1.5);
+		} else if (playerNumber === 2) {
+			setPlayerTwoSplitHand([ playerTwoHand[1] ]);
+			setPlayerTwoHand([ playerTwoHand[0] ]);
+		} else if (playerNumber === 3) {
+			setPlayerThreeSplitHand([ playerThreeHand[1] ]);
+			setPlayerThreeHand([ playerThreeHand[0] ]);
+		} else if (playerNumber === 4) {
+			setPlayerFourSplitHand([ playerFourHand[1] ]);
+			setPlayerFourHand([ playerFourHand[0] ]);
 		}
 	};
 
@@ -177,6 +246,24 @@ const GameTwentyOne = () => {
 				cardImages.push(<img src={card.image} alt={card.code} />);
 			});
 			cardImages.push(<p>second split hand score:{calculateScore(playerOneSplitHand, false)}</p>);
+		} else if (playerNumber === 2 && playerTwoSplitHand.length > 0) {
+			cardImages.push(<p>first split hand score:{calculateScore(playerTwoHand, false)}</p>);
+			playerTwoSplitHand.forEach((card) => {
+				cardImages.push(<img src={card.image} alt={card.code} />);
+			});
+			cardImages.push(<p>second split hand score:{calculateScore(playerTwoSplitHand, false)}</p>);
+		} else if (playerNumber === 3 && playerThreeSplitHand.length > 0) {
+			cardImages.push(<p>first split hand score:{calculateScore(playerThreeHand, false)}</p>);
+			playerThreeSplitHand.forEach((card) => {
+				cardImages.push(<img src={card.image} alt={card.code} />);
+			});
+			cardImages.push(<p>second split hand score:{calculateScore(playerThreeSplitHand, false)}</p>);
+		} else if (playerNumber === 4 && playerFourSplitHand.length > 0) {
+			cardImages.push(<p>first split hand score:{calculateScore(playerFourHand, false)}</p>);
+			playerFourSplitHand.forEach((card) => {
+				cardImages.push(<img src={card.image} alt={card.code} />);
+			});
+			cardImages.push(<p>second split hand score:{calculateScore(playerFourSplitHand, false)}</p>);
 		}
 		return cardImages;
 	};
@@ -238,11 +325,21 @@ const GameTwentyOne = () => {
 			setPlayerOneHand((playerOneHand) => [ ...playerOneHand, deckOfCards[0] ]);
 		} else if (player === 2) {
 			setPlayerTwoHand((playerTwoHand) => [ ...playerTwoHand, deckOfCards[0] ]);
+		} else if (player === 3) {
+			setPlayerThreeHand((playerThreeHand) => [ ...playerThreeHand, deckOfCards[0] ]);
+		} else if (player === 4) {
+			setPlayerFourHand((playerFourHand) => [ ...playerFourHand, deckOfCards[0] ]);
 		} else if (player === 0) {
 			setComputerHand((computerHand) => [ ...computerHand, deckOfCards[0] ]);
 			// setComputerScore(computerScore + deckOfCards[0].value);
 		} else if (player === 1.5) {
 			setPlayerOneSplitHand((playerOneSplitHand) => [ ...playerOneSplitHand, deckOfCards[0] ]);
+		} else if (player === 2.5) {
+			setPlayerTwoSplitHand((playerTwoSplitHand) => [ ...playerTwoSplitHand, deckOfCards[0] ]);
+		} else if (player === 3.5) {
+			setPlayerThreeSplitHand((playerThreeSplitHand) => [ ...playerThreeSplitHand, deckOfCards[0] ]);
+		} else if (player === 4.5) {
+			setPlayerFourSplitHand((playerFourSplitHand) => [ ...playerFourSplitHand, deckOfCards[0] ]);
 		}
 		console.log('in handleTwist, player= ', player);
 		setDeckOfCards(deckOfCards.slice(1));
@@ -252,9 +349,21 @@ const GameTwentyOne = () => {
 	const handleStick = () => {
 		if (playerNumberTurn === 1 && playerOneSplitHand.length > 0) {
 			setPlayerNumberTurn(1.5);
-		} else if (playerNumberTurn === 1.5) {
+		} else if (playerNumberTurn === 2 && playerTwoSplitHand.length > 0) {
+			setPlayerNumberTurn(2.5);
+		} else if (playerNumberTurn === 3 && playerThreeSplitHand.length > 0) {
+			setPlayerNumberTurn(3.5);
+		} else if (playerNumberTurn === 4 && playerFourSplitHand.length > 0) {
+			setPlayerNumberTurn(4.5);
+		} else if (playerNumberTurn === 1.5 && numberOfPlayers > 1) {
 			setPlayerNumberTurn(2);
-		} else if (playerNumberTurn === numberOfPlayers) {
+		} else if (playerNumberTurn === 2.5 && numberOfPlayers > 2) {
+			setPlayerNumberTurn(3);
+		} else if (playerNumberTurn === 3.5 && numberOfPlayers > 3) {
+			setPlayerNumberTurn(4);
+		} else if (playerNumberTurn === 4.5 && numberOfPlayers === 4) {
+			setPlayerNumberTurn(0);
+		} else if (playerNumberTurn >= numberOfPlayers) {
 			setPlayerNumberTurn(0);
 			setComputerScore(calculateScore(computerHand));
 			// handleComputerTurn();
@@ -301,13 +410,24 @@ const GameTwentyOne = () => {
 	return (
 		<div>
 			<h1>Game Twenty-One</h1>
+			<select onChange={(event) => setNumberOfPlayers(parseInt(event.target.value))}>
+				<option>No. of Players</option>
+				<option value={1}>1</option>
+				<option value={2}>2</option>
+				<option value={3}>3</option>
+				<option value={4}>4</option>
+			</select>
 			<button onClick={() => handleDrawCards()}>Deal</button>
 			{playerOneHand.length > 0 ? <button onClick={() => handleTwist(playerNumberTurn)}>Twist</button> : null}
 			{playerOneHand.length > 0 ? <button onClick={() => handleStick()}>Stick</button> : null}
 			{displayCards(playerOneHand, 1)}
 			{calculateScore(playerOneHand, false)}
 			{displayCards(playerTwoHand, 2)}
-			{calculateScore(playerTwoHand, false)}
+			{numberOfPlayers >= 2 && calculateScore(playerTwoHand, false)}
+			{displayCards(playerThreeHand, 3)}
+			{numberOfPlayers >= 3 && calculateScore(playerThreeHand, false)}
+			{displayCards(playerFourHand, 4)}
+			{numberOfPlayers >= 4 && calculateScore(playerFourHand, false)}
 			{computerHand.length > 0 && displayComputerCards()}
 			{computerHand.length > 0 && calculateScore(computerHand, true)}
 		</div>
