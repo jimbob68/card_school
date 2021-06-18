@@ -52,16 +52,19 @@ const GameTwentyOne = () => {
 	const [ deckId, setDeckId ] = useState('');
 	const [ deckOfCards, setDeckOfCards ] = useState([]);
 	const [ playerOneHand, setPlayerOneHand ] = useState([]);
-	// const [ playerOneHand, setPlayerOneHand ] = useState(thing);
 	const [ playerTwoHand, setPlayerTwoHand ] = useState([]);
+	const [ playerThreeHand, setPlayerThreeHand ] = useState([]);
+	const [ playerFourHand, setPlayerFourHand ] = useState([]);
+	// const [ playerOneHand, setPlayerOneHand ] = useState(thing);
+	// const [ playerTwoHand, setPlayerTwoHand ] = useState(thing);
+	// const [ playerThreeHand, setPlayerThreeHand ] = useState(thing);
+	// const [ playerFourHand, setPlayerFourHand ] = useState(thing);
 	const [ computerHand, setComputerHand ] = useState([]);
 	// const [ computerHand, setComputerHand ] = useState(otherThing);
 	const [ playerNumberTurn, setPlayerNumberTurn ] = useState(1);
 	const [ numberOfPlayers, setNumberOfPlayers ] = useState(1);
 	const [ computerScore, setComputerScore ] = useState(0);
 	const [ playerOneSplitHand, setPlayerOneSplitHand ] = useState([]);
-	const [ playerThreeHand, setPlayerThreeHand ] = useState([]);
-	const [ playerFourHand, setPlayerFourHand ] = useState([]);
 	const [ playerTwoSplitHand, setPlayerTwoSplitHand ] = useState([]);
 	const [ playerThreeSplitHand, setPlayerThreeSplitHand ] = useState([]);
 	const [ playerFourSplitHand, setPlayerFourSplitHand ] = useState([]);
@@ -389,8 +392,9 @@ const GameTwentyOne = () => {
 			setPlayerNumberTurn(3);
 		} else if (playerNumberTurn === 3.5 && numberOfPlayers > 3) {
 			setPlayerNumberTurn(4);
-		} else if (playerNumberTurn === 4.5 && numberOfPlayers === 4) {
-			setPlayerNumberTurn(0);
+			// } else if (playerNumberTurn === 4.5 && numberOfPlayers === 4) {
+			// 	setPlayerNumberTurn(0);
+			// 	setComputerScore(calculateScore(computerHand));
 		} else if (playerNumberTurn >= numberOfPlayers) {
 			setPlayerNumberTurn(0);
 			setComputerScore(calculateScore(computerHand));
@@ -431,6 +435,10 @@ const GameTwentyOne = () => {
 		const playerThreeScore = calculateScore(playerThreeHand);
 		const playerFourScore = calculateScore(playerFourHand);
 		let computerWins = true;
+		const playerOneSplitScore = calculateScore(playerOneSplitHand);
+		const playerTwoSplitScore = calculateScore(playerTwoSplitHand);
+		const playerThreeSplitScore = calculateScore(playerThreeSplitHand);
+		const playerFourSplitScore = calculateScore(playerFourSplitHand);
 
 		if ((playerOneScore > computerScore && playerOneScore <= 21) || (playerOneScore <= 21 && computerScore > 21)) {
 			computerWins = false;
@@ -471,6 +479,51 @@ const GameTwentyOne = () => {
 			computerWins = false;
 			alert('Player Four draws with the Dealer!');
 		}
+
+		if (
+			(playerOneSplitScore > computerScore && playerOneSplitScore <= 21) ||
+			(playerOneSplitScore <= 21 && computerScore > 21 && playerOneSplitScore > 0)
+		) {
+			computerWins = false;
+			alert("Player One's second hand beats the Dealer!");
+		} else if (playerOneSplitScore === computerScore && playerOneSplitScore <= 21) {
+			computerWins = false;
+			alert("Player One's second hand draws with the Dealer!");
+		}
+		if (
+			numberOfPlayers >= 2 &&
+			((playerTwoSplitScore > computerScore && playerTwoSplitScore <= 21) ||
+				(playerTwoSplitScore <= 21 && computerScore > 21 && playerTwoSplitScore > 0))
+		) {
+			computerWins = false;
+			alert("Player Two's second hand beats the Dealer!");
+		} else if (playerTwoSplitScore === computerScore && playerTwoSplitScore <= 21) {
+			computerWins = false;
+			alert("Player Two's second hand draws with the Dealer!");
+		}
+		if (
+			numberOfPlayers >= 3 &&
+			((playerThreeSplitScore > computerScore && playerThreeSplitScore <= 21) ||
+				(playerThreeSplitScore <= 21 && computerScore > 21 && playerThreeSplitScore > 0))
+		) {
+			computerWins = false;
+			alert("Player Three's second hand beats the Dealer!");
+		} else if (playerThreeSplitScore === computerScore && playerThreeSplitScore <= 21) {
+			computerWins = false;
+			alert("Player Three's second hand draws with the Dealer!");
+		}
+		if (
+			numberOfPlayers >= 4 &&
+			((playerFourSplitScore > computerScore && playerFourSplitScore <= 21) ||
+				(playerFourSplitScore <= 21 && computerScore > 21 && playerFourSplitScore > 0))
+		) {
+			computerWins = false;
+			alert("Player Four's second hand beats the Dealer!");
+		} else if (playerFourSplitScore === computerScore && playerFourSplitScore <= 21) {
+			computerWins = false;
+			alert("Player Four's second hand draws with the Dealer!");
+		}
+
 		if (computerWins) {
 			alert('Dealer wins!');
 		}
