@@ -68,6 +68,14 @@ const GameTwentyOne = () => {
 	const [ playerTwoSplitHand, setPlayerTwoSplitHand ] = useState([]);
 	const [ playerThreeSplitHand, setPlayerThreeSplitHand ] = useState([]);
 	const [ playerFourSplitHand, setPlayerFourSplitHand ] = useState([]);
+	const [ playerOneWallet, setPlayerOneWallet ] = useState(100);
+	const [ playerTwoWallet, setPlayerTwoWallet ] = useState(100);
+	const [ playerThreeWallet, setPlayerThreeWallet ] = useState(100);
+	const [ playerFourWallet, setPlayerFourWallet ] = useState(100);
+	const [ playerOneBet, setPlayerOneBet ] = useState(0);
+	const [ playerTwoBet, setPlayerTwoBet ] = useState(0);
+	const [ playerThreeBet, setPlayerThreeBet ] = useState(0);
+	const [ playerFourBet, setPlayerFourBet ] = useState(0);
 
 	useEffect(() => {
 		fetch('https://deckofcardsapi.com/api/deck/new/shuffle?deck_count=8')
@@ -196,19 +204,33 @@ const GameTwentyOne = () => {
 					let deck = results.cards;
 					setComputerHand(deck.slice(0, 2));
 					setPlayerOneHand(deck.slice(2, 4));
+					setPlayerOneBet(5);
+					setPlayerOneWallet(playerOneWallet - 5);
 					if (numberOfPlayers === 1) {
 						setDeckOfCards(deck.slice(4));
 					}
 					if (numberOfPlayers === 2) {
+						setPlayerTwoBet(5);
+						setPlayerTwoWallet(playerTwoWallet - 5);
 						setPlayerTwoHand(deck.slice(4, 6));
 						setDeckOfCards(deck.slice(6));
 					}
 					if (numberOfPlayers === 3) {
+						setPlayerTwoBet(5);
+						setPlayerTwoWallet(playerTwoWallet - 5);
+						setPlayerThreeBet(5);
+						setPlayerThreeWallet(playerThreeWallet - 5);
 						setPlayerTwoHand(deck.slice(4, 6));
 						setPlayerThreeHand(deck.slice(6, 8));
 						setDeckOfCards(deck.slice(8));
 					}
 					if (numberOfPlayers === 4) {
+						setPlayerTwoBet(5);
+						setPlayerTwoWallet(playerTwoWallet - 5);
+						setPlayerThreeBet(5);
+						setPlayerThreeWallet(playerThreeWallet - 5);
+						setPlayerFourBet(5);
+						setPlayerFourWallet(playerFourWallet - 5);
 						setPlayerTwoHand(deck.slice(4, 6));
 						setPlayerThreeHand(deck.slice(6, 8));
 						setPlayerFourHand(deck.slice(8, 10));
@@ -226,19 +248,34 @@ const GameTwentyOne = () => {
 			let deck = deckOfCards;
 			setComputerHand(deck.slice(0, 2));
 			setPlayerOneHand(deck.slice(2, 4));
+			setPlayerOneBet(5);
+			setPlayerOneWallet(playerOneWallet - 5);
+
 			if (numberOfPlayers === 1) {
 				setDeckOfCards(deck.slice(4));
 			}
 			if (numberOfPlayers === 2) {
+				setPlayerTwoBet(5);
+				setPlayerTwoWallet(playerTwoWallet - 5);
 				setPlayerTwoHand(deck.slice(4, 6));
 				setDeckOfCards(deck.slice(6));
 			}
 			if (numberOfPlayers === 3) {
+				setPlayerTwoBet(5);
+				setPlayerTwoWallet(playerTwoWallet - 5);
+				setPlayerThreeBet(5);
+				setPlayerThreeWallet(playerThreeWallet - 5);
 				setPlayerTwoHand(deck.slice(4, 6));
 				setPlayerThreeHand(deck.slice(6, 8));
 				setDeckOfCards(deck.slice(8));
 			}
 			if (numberOfPlayers === 4) {
+				setPlayerTwoBet(5);
+				setPlayerTwoWallet(playerTwoWallet - 5);
+				setPlayerThreeBet(5);
+				setPlayerThreeWallet(playerThreeWallet - 5);
+				setPlayerFourBet(5);
+				setPlayerFourWallet(playerFourWallet - 5);
 				setPlayerTwoHand(deck.slice(4, 6));
 				setPlayerThreeHand(deck.slice(6, 8));
 				setPlayerFourHand(deck.slice(8, 10));
@@ -529,6 +566,28 @@ const GameTwentyOne = () => {
 		}
 	};
 
+	const handlePlaceBet = (amount) => {
+		if (playerNumberTurn === 1) {
+			setPlayerOneBet(playerOneBet + amount);
+			setPlayerOneWallet(playerOneWallet - amount);
+		}
+
+		if (playerNumberTurn === 2) {
+			setPlayerTwoBet(playerTwoBet + amount);
+			setPlayerTwoWallet(playerTwoWallet - amount);
+		}
+
+		if (playerNumberTurn === 3) {
+			setPlayerThreeBet(playerThreeBet + amount);
+			setPlayerThreeWallet(playerThreeWallet - amount);
+		}
+
+		if (playerNumberTurn === 4) {
+			setPlayerFourBet(playerFourBet + amount);
+			setPlayerFourWallet(playerFourWallet - amount);
+		}
+	};
+
 	return (
 		<div>
 			<h1>Game Twenty-One</h1>
@@ -542,6 +601,34 @@ const GameTwentyOne = () => {
 			<button onClick={() => handleDrawCards()}>Deal</button>
 			{playerOneHand.length > 0 ? <button onClick={() => handleTwist(playerNumberTurn)}>Twist</button> : null}
 			{playerOneHand.length > 0 ? <button onClick={() => handleStick()}>Stick</button> : null}
+			<select onChange={(event) => handlePlaceBet(parseInt(event.target.value))}>
+				<option>Place your bet!</option>
+				<option value={0}>0</option>
+				<option value={1}>1</option>
+				<option value={2}>2</option>
+				<option value={3}>3</option>
+				<option value={4}>4</option>
+				<option value={5}>5</option>
+				<option value={6}>6</option>
+				<option value={7}>7</option>
+				<option value={8}>8</option>
+				<option value={9}>9</option>
+				<option value={10}>10</option>
+			</select>
+
+			<p>
+				Player One: £{playerOneWallet} Bet: £{playerOneBet}
+			</p>
+			<p>
+				Player Two: £{playerTwoWallet} Bet: £{playerTwoBet}
+			</p>
+			<p>
+				Player Three: £{playerThreeWallet} Bet: £{playerThreeBet}
+			</p>
+			<p>
+				Player Four: £{playerFourWallet} Bet: £{playerFourBet}
+			</p>
+
 			{displayCards(playerOneHand, 1)}
 			{calculateScore(playerOneHand, false)}
 			{displayCards(playerTwoHand, 2)}
