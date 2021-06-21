@@ -1,0 +1,14 @@
+.blackjack-container {
+	background-color: darkgreen;
+	color: white;
+	min-height: 100vh;
+}
+
+img {
+	width: 100px;
+}
+
+.hands-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}

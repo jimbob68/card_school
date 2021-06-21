@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './GameTwentyOne.css';
+import Player from './Player.js';
 import backOfCard from '../assets/back_of_card.png';
 
 const GameTwentyOne = () => {
@@ -310,39 +311,39 @@ const GameTwentyOne = () => {
 		}
 	};
 
-	const displayCards = (hand, playerNumber) => {
-		const cardImages = hand.map((card) => <img src={card.image} alt={card.code} />);
+	// const displayCards = (hand, playerNumber) => {
+	// 	const cardImages = hand.map((card) => <img src={card.image} alt={card.code} />);
 
-		if (hand.length === 2 && hand[0].value === hand[1].value && playerNumberTurn !== 0) {
-			cardImages.push(<button onClick={() => handleSplit(playerNumberTurn)}>Split</button>);
-		}
-		if (playerNumber === 1 && playerOneSplitHand.length > 0) {
-			cardImages.push(<p>first split hand score:{calculateScore(playerOneHand, false)}</p>);
-			playerOneSplitHand.forEach((card) => {
-				cardImages.push(<img src={card.image} alt={card.code} />);
-			});
-			cardImages.push(<p>second split hand score:{calculateScore(playerOneSplitHand, false)}</p>);
-		} else if (playerNumber === 2 && playerTwoSplitHand.length > 0) {
-			cardImages.push(<p>first split hand score:{calculateScore(playerTwoHand, false)}</p>);
-			playerTwoSplitHand.forEach((card) => {
-				cardImages.push(<img src={card.image} alt={card.code} />);
-			});
-			cardImages.push(<p>second split hand score:{calculateScore(playerTwoSplitHand, false)}</p>);
-		} else if (playerNumber === 3 && playerThreeSplitHand.length > 0) {
-			cardImages.push(<p>first split hand score:{calculateScore(playerThreeHand, false)}</p>);
-			playerThreeSplitHand.forEach((card) => {
-				cardImages.push(<img src={card.image} alt={card.code} />);
-			});
-			cardImages.push(<p>second split hand score:{calculateScore(playerThreeSplitHand, false)}</p>);
-		} else if (playerNumber === 4 && playerFourSplitHand.length > 0) {
-			cardImages.push(<p>first split hand score:{calculateScore(playerFourHand, false)}</p>);
-			playerFourSplitHand.forEach((card) => {
-				cardImages.push(<img src={card.image} alt={card.code} />);
-			});
-			cardImages.push(<p>second split hand score:{calculateScore(playerFourSplitHand, false)}</p>);
-		}
-		return cardImages;
-	};
+	// 	if (hand.length === 2 && hand[0].value === hand[1].value && playerNumberTurn !== 0) {
+	// 		cardImages.push(<button onClick={() => handleSplit(playerNumberTurn)}>Split</button>);
+	// 	}
+	// 	if (playerNumber === 1 && playerOneSplitHand.length > 0) {
+	// 		cardImages.push(<p>first split hand score:{calculateScore(playerOneHand, false)}</p>);
+	// 		playerOneSplitHand.forEach((card) => {
+	// 			cardImages.push(<img src={card.image} alt={card.code} />);
+	// 		});
+	// 		cardImages.push(<p>second split hand score:{calculateScore(playerOneSplitHand, false)}</p>);
+	// 	} else if (playerNumber === 2 && playerTwoSplitHand.length > 0) {
+	// 		cardImages.push(<p>first split hand score:{calculateScore(playerTwoHand, false)}</p>);
+	// 		playerTwoSplitHand.forEach((card) => {
+	// 			cardImages.push(<img src={card.image} alt={card.code} />);
+	// 		});
+	// 		cardImages.push(<p>second split hand score:{calculateScore(playerTwoSplitHand, false)}</p>);
+	// 	} else if (playerNumber === 3 && playerThreeSplitHand.length > 0) {
+	// 		cardImages.push(<p>first split hand score:{calculateScore(playerThreeHand, false)}</p>);
+	// 		playerThreeSplitHand.forEach((card) => {
+	// 			cardImages.push(<img src={card.image} alt={card.code} />);
+	// 		});
+	// 		cardImages.push(<p>second split hand score:{calculateScore(playerThreeSplitHand, false)}</p>);
+	// 	} else if (playerNumber === 4 && playerFourSplitHand.length > 0) {
+	// 		cardImages.push(<p>first split hand score:{calculateScore(playerFourHand, false)}</p>);
+	// 		playerFourSplitHand.forEach((card) => {
+	// 			cardImages.push(<img src={card.image} alt={card.code} />);
+	// 		});
+	// 		cardImages.push(<p>second split hand score:{calculateScore(playerFourSplitHand, false)}</p>);
+	// 	}
+	// 	return <div className="player-hand">{cardImages}</div>;
+	// };
 
 	const displayComputerCards = () => {
 		let cardImages = [];
@@ -352,7 +353,7 @@ const GameTwentyOne = () => {
 			cardImages.push(<img src={computerHand[0].image} alt={computerHand[0].code} />);
 			cardImages.push(<img src={backOfCard} alt="Back of card" />);
 		}
-		return cardImages;
+		return <div className="player-hand">{cardImages}</div>;
 	};
 
 	// const handleTwist = (player) => {
@@ -593,11 +594,11 @@ const GameTwentyOne = () => {
 		) {
 			computerWins = false;
 			alert("Player Two's second hand beats the Dealer and wins £" + playerTwoBet + '!');
-			setPlayerTwoWallet(playerTwoWallet + playerTwoBet);
+			playerTwoBank += playerTwoBet;
 		} else if (playerTwoSplitScore === computerScore && playerTwoSplitScore <= 21) {
 			computerWins = false;
 			alert("Player Two's second hand draws with the Dealer and gets £" + playerTwoBet / 2 + '!');
-			setPlayerTwoWallet(playerTwoWallet + playerTwoBet / 2);
+			playerTwoBank += playerTwoBet / 2;
 		}
 		if (
 			numberOfPlayers >= 3 &&
@@ -606,11 +607,11 @@ const GameTwentyOne = () => {
 		) {
 			computerWins = false;
 			alert("Player Three's second hand beats the Dealer and wins £" + playerThreeBet + '!');
-			setPlayerThreeWallet(playerThreeWallet + playerThreeBet);
+			playerThreeBank += playerThreeBet;
 		} else if (playerThreeSplitScore === computerScore && playerThreeSplitScore <= 21) {
 			computerWins = false;
 			alert("Player Three's second hand draws with the Dealer and gets £" + playerThreeBet / 2 + '!');
-			setPlayerThreeWallet(playerThreeWallet + playerThreeBet / 2);
+			playerThreeBank += playerThreeBet / 2;
 		}
 		if (
 			numberOfPlayers >= 4 &&
@@ -619,11 +620,11 @@ const GameTwentyOne = () => {
 		) {
 			computerWins = false;
 			alert("Player Four's second hand beats the Dealer and wins £" + playerFourBet + '!');
-			setPlayerFourWallet(playerFourWallet + playerFourBet);
+			playerFourBank += playerFourBet;
 		} else if (playerFourSplitScore === computerScore && playerFourSplitScore <= 21) {
 			computerWins = false;
 			alert("Player Four's second hand draws with the Dealer and gets £" + playerFourBet / 2 + '!');
-			setPlayerFourWallet(playerFourWallet + playerFourBet / 2);
+			playerFourBank += playerFourBet / 2;
 		}
 
 		if (computerWins) {
@@ -662,7 +663,7 @@ const GameTwentyOne = () => {
 	};
 
 	return (
-		<div>
+		<div className="blackjack-container">
 			<h1>Game Twenty-One</h1>
 			<select onChange={(event) => setNumberOfPlayers(parseInt(event.target.value))}>
 				<option>No. of Players</option>
@@ -672,7 +673,7 @@ const GameTwentyOne = () => {
 				<option value={4}>4</option>
 			</select>
 			<button onClick={() => handleDrawCards()}>Deal</button>
-			{playerOneHand.length > 0 ? <button onClick={() => handleTwist(playerNumberTurn)}>Twist</button> : null}
+			{/* {playerOneHand.length > 0 ? <button onClick={() => handleTwist(playerNumberTurn)}>Twist</button> : null}
 			{playerOneHand.length > 0 ? <button onClick={() => handleStick()}>Stick</button> : null}
 			<select id="bet-dropdown" onChange={(event) => handlePlaceBet(parseInt(event.target.value))}>
 				<option>Place your bet!</option>
@@ -687,7 +688,7 @@ const GameTwentyOne = () => {
 				<option value={8}>8</option>
 				<option value={9}>9</option>
 				<option value={10}>10</option>
-			</select>
+			</select> */}
 
 			<p>
 				Player One: £{playerOneWallet} Bet: £{playerOneBet}
@@ -701,17 +702,85 @@ const GameTwentyOne = () => {
 			<p>
 				Player Four: £{playerFourWallet} Bet: £{playerFourBet}
 			</p>
+			<div className="hands-container">
+				<Player
+					hand={playerOneHand}
+					calculateScore={calculateScore}
+					playerNumber={1}
+					computerTurn={false}
+					handleSplit={handleSplit}
+					playerNumberTurn={playerNumberTurn}
+					splitHand={playerOneSplitHand}
+					handleStick={handleStick}
+					handleTwist={handleTwist}
+					handlePlaceBet={handlePlaceBet}
+				/>
 
-			{displayCards(playerOneHand, 1)}
-			{calculateScore(playerOneHand, false)}
-			{displayCards(playerTwoHand, 2)}
-			{numberOfPlayers >= 2 && calculateScore(playerTwoHand, false)}
-			{displayCards(playerThreeHand, 3)}
-			{numberOfPlayers >= 3 && calculateScore(playerThreeHand, false)}
-			{displayCards(playerFourHand, 4)}
-			{numberOfPlayers >= 4 && calculateScore(playerFourHand, false)}
-			{computerHand.length > 0 && displayComputerCards()}
-			{computerHand.length > 0 && calculateScore(computerHand, true)}
+				<Player
+					hand={playerTwoHand}
+					calculateScore={calculateScore}
+					playerNumber={2}
+					computerTurn={false}
+					handleSplit={handleSplit}
+					playerNumberTurn={playerNumberTurn}
+					splitHand={playerTwoSplitHand}
+					handleStick={handleStick}
+					handleTwist={handleTwist}
+					handlePlaceBet={handlePlaceBet}
+				/>
+				<Player
+					hand={playerThreeHand}
+					calculateScore={calculateScore}
+					playerNumber={3}
+					computerTurn={false}
+					handleSplit={handleSplit}
+					playerNumberTurn={playerNumberTurn}
+					splitHand={playerThreeSplitHand}
+					handleStick={handleStick}
+					handleTwist={handleTwist}
+					handlePlaceBet={handlePlaceBet}
+				/>
+				<Player
+					hand={playerFourHand}
+					calculateScore={calculateScore}
+					playerNumber={4}
+					computerTurn={false}
+					handleSplit={handleSplit}
+					playerNumberTurn={playerNumberTurn}
+					splitHand={playerFourSplitHand}
+					handleStick={handleStick}
+					handleTwist={handleTwist}
+					handlePlaceBet={handlePlaceBet}
+				/>
+				{/* <Player
+					hand={computerHand}
+					calculateScore={calculateScore}
+					playerNumber={0}
+					computerTurn={true}
+					playerNumberTurn={playerNumberTurn}
+			
+				/> */}
+				{/* <div>
+					{displayCards(playerOneHand, 1)}
+					{calculateScore(playerOneHand, false)}
+				</div>
+				<div>
+					{displayCards(playerTwoHand, 2)}
+					{numberOfPlayers >= 2 && calculateScore(playerTwoHand, false)}
+				</div>
+				<div>
+					{displayCards(playerThreeHand, 3)}
+					{numberOfPlayers >= 3 && calculateScore(playerThreeHand, false)}
+				</div> */}
+				{/* <div>
+					{displayCards(playerFourHand, 4)}
+					{numberOfPlayers >= 4 && calculateScore(playerFourHand, false)}
+				</div> */}
+				<div>
+					{computerHand.length > 0 && displayComputerCards()}
+					{computerHand.length > 0 && calculateScore(computerHand, true)}
+				</div>
+			</div>
 		</div>
 	);
 };
