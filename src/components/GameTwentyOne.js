@@ -288,17 +288,25 @@ const GameTwentyOne = () => {
 		if (playerNumber === 1) {
 			setPlayerOneSplitHand([ playerOneHand[1] ]);
 			setPlayerOneHand([ playerOneHand[0] ]);
+			setPlayerOneBet(playerOneBet * 2);
+			setPlayerOneWallet(playerOneWallet - playerOneBet);
 			// handleTwist(1);
 			// handleTwist(1.5);
 		} else if (playerNumber === 2) {
 			setPlayerTwoSplitHand([ playerTwoHand[1] ]);
 			setPlayerTwoHand([ playerTwoHand[0] ]);
+			setPlayerTwoBet(playerTwoBet * 2);
+			setPlayerTwoWallet(playerTwoWallet - playerTwoBet);
 		} else if (playerNumber === 3) {
 			setPlayerThreeSplitHand([ playerThreeHand[1] ]);
 			setPlayerThreeHand([ playerThreeHand[0] ]);
+			setPlayerThreeBet(playerThreeBet * 2);
+			setPlayerThreeWallet(playerThreeWallet - playerThreeBet);
 		} else if (playerNumber === 4) {
 			setPlayerFourSplitHand([ playerFourHand[1] ]);
 			setPlayerFourHand([ playerFourHand[0] ]);
+			setPlayerFourBet(playerFourBet * 2);
+			setPlayerFourWallet(playerFourWallet - playerFourBet);
 		}
 	};
 
@@ -415,6 +423,7 @@ const GameTwentyOne = () => {
 	};
 
 	const handleStick = () => {
+		document.getElementById('bet-dropdown').selectedIndex = 0;
 		if (playerNumberTurn === 1 && playerOneSplitHand.length > 0) {
 			setPlayerNumberTurn(1.5);
 		} else if (playerNumberTurn === 2 && playerTwoSplitHand.length > 0) {
@@ -476,23 +485,49 @@ const GameTwentyOne = () => {
 		const playerTwoSplitScore = calculateScore(playerTwoSplitHand);
 		const playerThreeSplitScore = calculateScore(playerThreeSplitHand);
 		const playerFourSplitScore = calculateScore(playerFourSplitHand);
+		let playerOneBank = playerOneWallet;
+		let playerTwoBank = playerTwoWallet;
+		let playerThreeBank = playerThreeWallet;
+		let playerFourBank = playerFourWallet;
 
 		if ((playerOneScore > computerScore && playerOneScore <= 21) || (playerOneScore <= 21 && computerScore > 21)) {
 			computerWins = false;
-			alert('Player One beats the Dealer!');
+			let betAmount = playerOneBet;
+			if (playerOneSplitHand.length > 0) {
+				betAmount = playerOneBet / 2;
+			}
+			alert('Player One beats the Dealer and wins £' + betAmount * 2 + '!');
+			// setPlayerOneWallet(playerOneWallet + betAmount * 2);
+			playerOneBank += betAmount * 2;
 		} else if (playerOneScore === computerScore && playerOneScore <= 21) {
 			computerWins = false;
-			alert('Player One draws with the Dealer!');
+			let betAmount = playerOneBet;
+			if (playerOneSplitHand.length > 0) {
+				betAmount = playerOneBet / 2;
+			}
+			alert('Player One draws with the Dealer and gets £' + betAmount + '!');
+			// setPlayerOneWallet(playerOneWallet + betAmount);
+			playerOneBank += betAmount;
 		}
 		if (
 			numberOfPlayers >= 2 &&
 			((playerTwoScore > computerScore && playerTwoScore <= 21) || (playerTwoScore <= 21 && computerScore > 21))
 		) {
 			computerWins = false;
-			alert('Player Two beats the Dealer!');
+			let betAmount = playerTwoBet;
+			if (playerTwoSplitHand.length > 0) {
+				betAmount = playerTwoBet / 2;
+			}
+			alert('Player Two beats the Dealer and wins £' + betAmount * 2 + '!');
+			playerTwoBank += betAmount * 2;
 		} else if (playerTwoScore === computerScore && playerTwoScore <= 21) {
 			computerWins = false;
-			alert('Player Two draws with the Dealer!');
+			let betAmount = playerTwoBet;
+			if (playerTwoSplitHand.length > 0) {
+				betAmount = playerTwoBet / 2;
+			}
+			alert('Player Two draws with the Dealer and gets £' + betAmount + '!');
+			playerTwoBank += betAmount;
 		}
 		if (
 			numberOfPlayers >= 3 &&
@@ -500,10 +535,20 @@ const GameTwentyOne = () => {
 				(playerThreeScore <= 21 && computerScore > 21))
 		) {
 			computerWins = false;
-			alert('Player Three beats the Dealer!');
+			let betAmount = playerThreeBet;
+			if (playerThreeSplitHand.length > 0) {
+				betAmount = playerThreeBet / 2;
+			}
+			alert('Player Three beats the Dealer and wins £' + betAmount * 2 + '!');
+			playerThreeBank += betAmount * 2;
 		} else if (playerThreeScore === computerScore && playerThreeScore <= 21) {
 			computerWins = false;
-			alert('Player Three draws with the Dealer!');
+			let betAmount = playerThreeBet;
+			if (playerThreeSplitHand.length > 0) {
+				betAmount = playerThreeBet / 2;
+			}
+			alert('Player Three draws with the Dealer and gets £' + betAmount + '!');
+			playerThreeBank += betAmount;
 		}
 		if (
 			numberOfPlayers >= 4 &&
@@ -511,10 +556,20 @@ const GameTwentyOne = () => {
 				(playerFourScore <= 21 && computerScore > 21))
 		) {
 			computerWins = false;
-			alert('Player Four beats the Dealer!');
+			let betAmount = playerFourBet;
+			if (playerFourSplitHand.length > 0) {
+				betAmount = playerFourBet / 2;
+			}
+			alert('Player Four beats the Dealer and wins £' + betAmount * 2 + '!');
+			playerFourBank += betAmount * 2;
 		} else if (playerFourScore === computerScore && playerFourScore <= 21) {
 			computerWins = false;
-			alert('Player Four draws with the Dealer!');
+			let betAmount = playerFourBet;
+			if (playerFourSplitHand.length > 0) {
+				betAmount = playerFourBet / 2;
+			}
+			alert('Player Four draws with the Dealer and gets £' + betAmount + '!');
+			playerFourBank += betAmount;
 		}
 
 		if (
@@ -522,10 +577,14 @@ const GameTwentyOne = () => {
 			(playerOneSplitScore <= 21 && computerScore > 21 && playerOneSplitScore > 0)
 		) {
 			computerWins = false;
-			alert("Player One's second hand beats the Dealer!");
+			alert("Player One's second hand beats the Dealer and wins £" + playerOneBet + '!');
+			// setPlayerOneWallet(playerOneWallet + playerOneBet);
+			playerOneBank += playerOneBet;
 		} else if (playerOneSplitScore === computerScore && playerOneSplitScore <= 21) {
 			computerWins = false;
-			alert("Player One's second hand draws with the Dealer!");
+			alert("Player One's second hand draws with the Dealer and gets £" + playerOneBet / 2 + '!');
+			// setPlayerOneWallet(playerOneWallet + playerOneBet / 2);
+			playerOneBank += playerOneBet / 2;
 		}
 		if (
 			numberOfPlayers >= 2 &&
@@ -533,10 +592,12 @@ const GameTwentyOne = () => {
 				(playerTwoSplitScore <= 21 && computerScore > 21 && playerTwoSplitScore > 0))
 		) {
 			computerWins = false;
-			alert("Player Two's second hand beats the Dealer!");
+			alert("Player Two's second hand beats the Dealer and wins £" + playerTwoBet + '!');
+			setPlayerTwoWallet(playerTwoWallet + playerTwoBet);
 		} else if (playerTwoSplitScore === computerScore && playerTwoSplitScore <= 21) {
 			computerWins = false;
-			alert("Player Two's second hand draws with the Dealer!");
+			alert("Player Two's second hand draws with the Dealer and gets £" + playerTwoBet / 2 + '!');
+			setPlayerTwoWallet(playerTwoWallet + playerTwoBet / 2);
 		}
 		if (
 			numberOfPlayers >= 3 &&
@@ -544,10 +605,12 @@ const GameTwentyOne = () => {
 				(playerThreeSplitScore <= 21 && computerScore > 21 && playerThreeSplitScore > 0))
 		) {
 			computerWins = false;
-			alert("Player Three's second hand beats the Dealer!");
+			alert("Player Three's second hand beats the Dealer and wins £" + playerThreeBet + '!');
+			setPlayerThreeWallet(playerThreeWallet + playerThreeBet);
 		} else if (playerThreeSplitScore === computerScore && playerThreeSplitScore <= 21) {
 			computerWins = false;
-			alert("Player Three's second hand draws with the Dealer!");
+			alert("Player Three's second hand draws with the Dealer and gets £" + playerThreeBet / 2 + '!');
+			setPlayerThreeWallet(playerThreeWallet + playerThreeBet / 2);
 		}
 		if (
 			numberOfPlayers >= 4 &&
@@ -555,15 +618,25 @@ const GameTwentyOne = () => {
 				(playerFourSplitScore <= 21 && computerScore > 21 && playerFourSplitScore > 0))
 		) {
 			computerWins = false;
-			alert("Player Four's second hand beats the Dealer!");
+			alert("Player Four's second hand beats the Dealer and wins £" + playerFourBet + '!');
+			setPlayerFourWallet(playerFourWallet + playerFourBet);
 		} else if (playerFourSplitScore === computerScore && playerFourSplitScore <= 21) {
 			computerWins = false;
-			alert("Player Four's second hand draws with the Dealer!");
+			alert("Player Four's second hand draws with the Dealer and gets £" + playerFourBet / 2 + '!');
+			setPlayerFourWallet(playerFourWallet + playerFourBet / 2);
 		}
 
 		if (computerWins) {
 			alert('Dealer wins!');
 		}
+		setPlayerOneBet(0);
+		setPlayerTwoBet(0);
+		setPlayerThreeBet(0);
+		setPlayerFourBet(0);
+		setPlayerOneWallet(playerOneBank);
+		setPlayerTwoWallet(playerTwoBank);
+		setPlayerThreeWallet(playerThreeBank);
+		setPlayerFourWallet(playerFourBank);
 	};
 
 	const handlePlaceBet = (amount) => {
@@ -601,7 +674,7 @@ const GameTwentyOne = () => {
 			<button onClick={() => handleDrawCards()}>Deal</button>
 			{playerOneHand.length > 0 ? <button onClick={() => handleTwist(playerNumberTurn)}>Twist</button> : null}
 			{playerOneHand.length > 0 ? <button onClick={() => handleStick()}>Stick</button> : null}
-			<select onChange={(event) => handlePlaceBet(parseInt(event.target.value))}>
+			<select id="bet-dropdown" onChange={(event) => handlePlaceBet(parseInt(event.target.value))}>
 				<option>Place your bet!</option>
 				<option value={0}>0</option>
 				<option value={1}>1</option>
