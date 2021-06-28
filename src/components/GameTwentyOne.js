@@ -77,6 +77,7 @@ const GameTwentyOne = () => {
 	const [ playerTwoBet, setPlayerTwoBet ] = useState(0);
 	const [ playerThreeBet, setPlayerThreeBet ] = useState(0);
 	const [ playerFourBet, setPlayerFourBet ] = useState(0);
+	const [ areButtonsDisabled, setAreButtonsDisabled ] = useState( true )
 
 	useEffect(() => {
 		fetch('https://deckofcardsapi.com/api/deck/new/shuffle?deck_count=8')
@@ -424,15 +425,21 @@ const GameTwentyOne = () => {
 	};
 
 	const handleStick = () => {
+		let buttonsDisplayed = true;
+
 		document.getElementById('bet-dropdown').selectedIndex = 0;
 		if (playerNumberTurn === 1 && playerOneSplitHand.length > 0) {
 			setPlayerNumberTurn(1.5);
+			buttonsDisplayed = false
 		} else if (playerNumberTurn === 2 && playerTwoSplitHand.length > 0) {
 			setPlayerNumberTurn(2.5);
+			buttonsDisplayed = false
 		} else if (playerNumberTurn === 3 && playerThreeSplitHand.length > 0) {
 			setPlayerNumberTurn(3.5);
+			buttonsDisplayed = false
 		} else if (playerNumberTurn === 4 && playerFourSplitHand.length > 0) {
 			setPlayerNumberTurn(4.5);
+			buttonsDisplayed = false
 		} else if (playerNumberTurn === 1.5 && numberOfPlayers > 1) {
 			setPlayerNumberTurn(2);
 		} else if (playerNumberTurn === 2.5 && numberOfPlayers > 2) {
@@ -449,6 +456,7 @@ const GameTwentyOne = () => {
 		} else {
 			setPlayerNumberTurn(playerNumberTurn + 1);
 		}
+		setAreButtonsDisabled( buttonsDisplayed )
 	};
 
 	const calculateScore = (hand, computerTurn) => {
@@ -660,6 +668,7 @@ const GameTwentyOne = () => {
 			setPlayerFourBet(playerFourBet + amount);
 			setPlayerFourWallet(playerFourWallet - amount);
 		}
+		setAreButtonsDisabled( false )
 	};
 
 	return (
@@ -693,15 +702,15 @@ const GameTwentyOne = () => {
 			<p>
 				Player One: £{playerOneWallet} Bet: £{playerOneBet}
 			</p>
-			<p>
+			{ numberOfPlayers > 1 && <p>
 				Player Two: £{playerTwoWallet} Bet: £{playerTwoBet}
-			</p>
-			<p>
+			</p>}
+			{ numberOfPlayers > 2 &&<p>
 				Player Three: £{playerThreeWallet} Bet: £{playerThreeBet}
-			</p>
-			<p>
+			</p>}
+			{ numberOfPlayers > 3 &&<p>
 				Player Four: £{playerFourWallet} Bet: £{playerFourBet}
-			</p>
+			</p>} 
 			<div className="hands-container">
 				<Player
 					hand={playerOneHand}
@@ -714,9 +723,10 @@ const GameTwentyOne = () => {
 					handleStick={handleStick}
 					handleTwist={handleTwist}
 					handlePlaceBet={handlePlaceBet}
+					areButtonsDisabled={ areButtonsDisabled }
 				/>
 
-				<Player
+				{ numberOfPlayers > 1 && <Player
 					hand={playerTwoHand}
 					calculateScore={calculateScore}
 					playerNumber={2}
@@ -727,8 +737,9 @@ const GameTwentyOne = () => {
 					handleStick={handleStick}
 					handleTwist={handleTwist}
 					handlePlaceBet={handlePlaceBet}
-				/>
-				<Player
+					areButtonsDisabled={ areButtonsDisabled }
+				/>}
+				{ numberOfPlayers > 2 && <Player
 					hand={playerThreeHand}
 					calculateScore={calculateScore}
 					playerNumber={3}
@@ -739,8 +750,9 @@ const GameTwentyOne = () => {
 					handleStick={handleStick}
 					handleTwist={handleTwist}
 					handlePlaceBet={handlePlaceBet}
-				/>
-				<Player
+					areButtonsDisabled={ areButtonsDisabled }
+				/>}
+				{ numberOfPlayers > 3 && <Player
 					hand={playerFourHand}
 					calculateScore={calculateScore}
 					playerNumber={4}
@@ -751,7 +763,8 @@ const GameTwentyOne = () => {
 					handleStick={handleStick}
 					handleTwist={handleTwist}
 					handlePlaceBet={handlePlaceBet}
-				/>
+					areButtonsDisabled={ areButtonsDisabled }
+				/>}
 				{/* <Player
 					hand={computerHand}
 					calculateScore={calculateScore}
@@ -777,6 +790,7 @@ const GameTwentyOne = () => {
 					{numberOfPlayers >= 4 && calculateScore(playerFourHand, false)}
 				</div> */}
 				<div>
+					<p>Dealer</p>
 					{computerHand.length > 0 && displayComputerCards()}
 					{computerHand.length > 0 && calculateScore(computerHand, true)}
 				</div>
