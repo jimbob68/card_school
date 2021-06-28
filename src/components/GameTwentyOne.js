@@ -724,6 +724,8 @@ const GameTwentyOne = () => {
 					handleTwist={handleTwist}
 					handlePlaceBet={handlePlaceBet}
 					areButtonsDisabled={ areButtonsDisabled }
+					playerWallet={ playerOneWallet }
+					playerBet={ playerOneBet }
 				/>
 
 				{ numberOfPlayers > 1 && <Player
@@ -738,6 +740,8 @@ const GameTwentyOne = () => {
 					handleTwist={handleTwist}
 					handlePlaceBet={handlePlaceBet}
 					areButtonsDisabled={ areButtonsDisabled }
+					playerWallet={ playerTwoWallet }
+					playerBet={ playerTwoBet }
 				/>}
 				{ numberOfPlayers > 2 && <Player
 					hand={playerThreeHand}
@@ -751,6 +755,8 @@ const GameTwentyOne = () => {
 					handleTwist={handleTwist}
 					handlePlaceBet={handlePlaceBet}
 					areButtonsDisabled={ areButtonsDisabled }
+					playerWallet={ playerThreeWallet }
+					playerBet={ playerThreeBet }
 				/>}
 				{ numberOfPlayers > 3 && <Player
 					hand={playerFourHand}
@@ -764,6 +770,8 @@ const GameTwentyOne = () => {
 					handleTwist={handleTwist}
 					handlePlaceBet={handlePlaceBet}
 					areButtonsDisabled={ areButtonsDisabled }
+					playerWallet={ playerFourWallet }
+					playerBet={ playerFourBet }
 				/>}
 				{/* <Player
 					hand={computerHand}

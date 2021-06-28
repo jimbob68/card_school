@@ -12,7 +12,9 @@ const Player = ({
 	handleTwist,
 	handleStick,
 	handlePlaceBet,
-	areButtonsDisabled
+	areButtonsDisabled,
+	playerWallet,
+	playerBet
 }) => {
 
 
@@ -20,7 +22,7 @@ const Player = ({
 	const displayCards = (hand, playerNumber) => {
 		const cardImages = hand.map((card) => <img src={card.image} alt={card.code} />);
 
-		if (hand.length === 2 && hand[0].value === hand[1].value && playerNumberTurn !== 0) {
+		if (hand.length === 2 && hand[0].value === hand[1].value && playerNumberTurn !== 0 && splitHand.length === 0) {
 			cardImages.push(<button disabled={ areButtonsDisabled }onClick={() => handleSplit(playerNumberTurn)}>Split</button>);
 		}
 		if (splitHand.length > 0) {
@@ -89,6 +91,8 @@ const Player = ({
 	return (
 		<div>
 			<p>Player { playerNumber }</p>
+			<p>Wallet: £{ playerWallet }</p>
+			<p>Bet: £{ playerBet }</p>
 			{displayCards(hand, playerNumber)}
 			{ (splitHand.length === 0 || (splitHand.length > 0 && playerNumberTurn % 1 === 0.5)) && displayButtons() }
 
