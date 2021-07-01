@@ -22,16 +22,16 @@ const Player = ({
 	const displayCards = (hand, playerNumber) => {
 		const cardImages = hand.map((card) => <img src={card.image} alt={card.code} />);
 
-		if (hand.length === 2 && hand[0].value === hand[1].value && playerNumberTurn !== 0 && splitHand.length === 0) {
-			cardImages.push(<button disabled={ areButtonsDisabled }onClick={() => handleSplit(playerNumberTurn)}>Split</button>);
+		if (hand.length === 2 && hand[0].value === hand[1].value && playerNumberTurn === playerNumber && splitHand.length === 0) {
+			cardImages.push(<button className="twist-stick-button" disabled={ areButtonsDisabled }onClick={() => handleSplit(playerNumberTurn)}>Split</button>);
 		}
 		if (splitHand.length > 0) {
 			cardImages.push( displayButtons() )
-			cardImages.push(<p>first split hand score:{calculateScore(hand, false)}</p>);
+			cardImages.push(<p>first split hand score: {calculateScore(hand, false)}</p>);
 			splitHand.forEach((card) => {
 				cardImages.push(<img src={card.image} alt={card.code} />);
 			});
-			cardImages.push(<p>second split hand score:{calculateScore(splitHand, false)}</p>);
+			cardImages.push(<p>second split hand score: {calculateScore(splitHand, false)}</p>);
 			if( playerNumberTurn % 1 !== 0 ){
 				cardImages.splice(hand.length, 1)
 			}
@@ -80,9 +80,9 @@ const Player = ({
 					<option value={10}>10</option>
 				</select>
 			
-				<button disabled={ areButtonsDisabled } onClick={() => handleTwist(playerNumberTurn)}>Twist</button>
+				<button className="twist-stick-button" disabled={ areButtonsDisabled } onClick={() => handleTwist(playerNumberTurn)}>Twist</button>
 			
-				<button disabled={ areButtonsDisabled } onClick={() => handleStick()}>Stick</button>
+				<button className="twist-stick-button" disabled={ areButtonsDisabled } onClick={() => handleStick()}>Stick</button>
 			</div> } 
 			</>
 			)			
@@ -90,9 +90,7 @@ const Player = ({
 
 	return (
 		<div>
-			<p>Player { playerNumber }</p>
-			<p>Wallet: £{ playerWallet }</p>
-			<p>Bet: £{ playerBet }</p>
+			<p>Player { playerNumber } - Wallet: £{ playerWallet } - Bet: £{ playerBet }</p>
 			{displayCards(hand, playerNumber)}
 			{ (splitHand.length === 0 || (splitHand.length > 0 && playerNumberTurn % 1 === 0.5)) && displayButtons() }
 
@@ -119,7 +117,7 @@ const Player = ({
 			{hand.length > 0 && (playerNumber === playerNumberTurn || playerNumber + 0.5 === playerNumberTurn) ? (
 				<button disabled={ areButtonsDisabled } onClick={() => handleStick()}>Stick</button>
 			) : null} */}
-			{calculateScore(hand, computerTurn)}
+			{splitHand.length === 0 && <p>Score: {calculateScore(hand, computerTurn)}</p>}
 		</div>
 	);
 };

@@ -12,3 +12,10 @@ img {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 }
+
+.deal-button {
+	background-color: rgb(202, 16, 131);
+	border-radius: 4px;
+	color: white;
+	margin-left: 10px;
+}
