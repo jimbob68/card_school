@@ -79,6 +79,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 	const [ playerFourBet, setPlayerFourBet ] = useState(0);
 	const [ areButtonsDisabled, setAreButtonsDisabled ] = useState(true);
 	const [ playersSelected, setPlayersSelected ] = useState(false);
+	const [ newGameButtonDisplayed, setNewGameButtonDisplayed ] = useState(false)
 
 	useEffect(() => {
 		if(deckOfCards.length < 52) {
@@ -543,6 +544,11 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		setPlayersSelected(false)
 		setNumberOfPlayers(0)
 		setPlayerNumberTurn(1)
+		setNewGameButtonDisplayed(false)
+		setPlayerOneSplitHand([])
+		setPlayerTwoSplitHand([])
+		setPlayerThreeSplitHand([])
+		setPlayerFourSplitHand([])
 	}
 
 	return (
@@ -550,7 +556,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 			<h1>Twenty-One</h1>
 			<button className="home-button" onClick={() => setCurrentGame("")}>Home</button>
 			<br/>
-			<button className="new-game-button" onClick={() => handleNewGame()}>New Game</button>
+			{ newGameButtonDisplayed && <button className="new-game-button" onClick={() => handleNewGame()}>New Game</button>}
 			<select value={numberOfPlayers} onChange={(event) => {
 				setPlayersSelected(true)
 				setNumberOfPlayers(parseInt(event.target.value))}}>
@@ -560,12 +566,14 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				<option value={3}>3</option>
 				<option value={4}>4</option>
 			</select>
-			<button className="deal-button" disabled={!playersSelected} onClick={() => handleDrawCards()}>
+			<button className="deal-button" disabled={!playersSelected} onClick={() => {
+				setNewGameButtonDisplayed(true)
+			handleDrawCards()}}>
 				Deal
 			</button>
-			<p>
+			{ numberOfPlayers > 0 && <p>
 				Player One: £{playerOneWallet} - Bet: £{playerOneBet}
-			</p>
+			</p>}
 			{numberOfPlayers > 1 && (
 				<p>
 					Player Two: £{playerTwoWallet} - Bet: £{playerTwoBet}
@@ -582,7 +590,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				</p>
 			)}
 			<div className="hands-container">
-				<Player
+				{ numberOfPlayers > 0 && <Player
 					hand={playerOneHand}
 					calculateScore={calculateScore}
 					playerNumber={1}
@@ -596,7 +604,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 					areButtonsDisabled={areButtonsDisabled}
 					playerWallet={playerOneWallet}
 					playerBet={playerOneBet}
-				/>
+				/>}
 
 				{numberOfPlayers > 1 && (
 					<Player
@@ -649,11 +657,11 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 						playerBet={playerFourBet}
 					/>
 				)}
-				<div>
+				{ numberOfPlayers > 0 && <div>
 					<p>Dealer</p>
 					{computerHand.length > 0 && displayComputerCards()}
 					{computerHand.length > 0 && calculateScore(computerHand, true)}
-				</div>
+				</div>}
 			</div>
 		</div>
 	);

@@ -31,3 +31,10 @@ img {
 	background-color: rgb(230, 107, 183);
 	
 }
+
+.new-game-button {
+	background-color: rgb(202, 16, 131);
+	border-radius: 4px;
+	color: white;
+	margin-right: 10px;
+}
