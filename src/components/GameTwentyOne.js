@@ -63,7 +63,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 	const [ computerHand, setComputerHand ] = useState([]);
 	// const [ computerHand, setComputerHand ] = useState(otherThing);
 	const [ playerNumberTurn, setPlayerNumberTurn ] = useState(1);
-	const [ numberOfPlayers, setNumberOfPlayers ] = useState(1);
+	const [ numberOfPlayers, setNumberOfPlayers ] = useState(0);
 	const [ computerScore, setComputerScore ] = useState(0);
 	const [ playerOneSplitHand, setPlayerOneSplitHand ] = useState([]);
 	const [ playerTwoSplitHand, setPlayerTwoSplitHand ] = useState([]);
@@ -78,8 +78,10 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 	const [ playerThreeBet, setPlayerThreeBet ] = useState(0);
 	const [ playerFourBet, setPlayerFourBet ] = useState(0);
 	const [ areButtonsDisabled, setAreButtonsDisabled ] = useState(true);
+	const [ playersSelected, setPlayersSelected ] = useState(false);
 
 	useEffect(() => {
+		if(deckOfCards.length < 52) {
 		fetch('https://deckofcardsapi.com/api/deck/new/shuffle?deck_count=8')
 			.then((res) => res.json())
 			.then((results) => {
@@ -92,7 +94,8 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 					.then((res) => res.json())
 					.then((results) => setDeckOfCards(results.cards));
 			});
-	}, []);
+		}
+	}, [deckOfCards]);
 
 	useEffect(
 		() => {
@@ -520,18 +523,44 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		setAreButtonsDisabled(false);
 	};
 
+	const handleNewGame = () => {
+		setPlayerOneHand([])
+		setPlayerTwoHand([])
+		setPlayerThreeHand([])
+		setPlayerFourHand([])
+		setPlayerOneWallet(100)
+		setPlayerTwoWallet(100)
+		setPlayerThreeWallet(100)
+		setPlayerFourWallet(100)
+		setPlayerOneBet(0)
+		setPlayerTwoBet(0)
+		setPlayerThreeBet(0)
+		setPlayerFourBet(0)
+		setComputerHand([])
+		// setComputerScore(0)
+		setDeckOfCards([])
+		setAreButtonsDisabled(true)
+		setPlayersSelected(false)
+		setNumberOfPlayers(0)
+		setPlayerNumberTurn(1)
+	}
+
 	return (
 		<div className="blackjack-container">
 			<h1>Twenty-One</h1>
-			<button onClick={() => setCurrentGame("")}>Home</button>
-			<select onChange={(event) => setNumberOfPlayers(parseInt(event.target.value))}>
-				<option>No. of Players</option>
+			<button className="home-button" onClick={() => setCurrentGame("")}>Home</button>
+			<br/>
+			<button className="new-game-button" onClick={() => handleNewGame()}>New Game</button>
+			<select value={numberOfPlayers} onChange={(event) => {
+				setPlayersSelected(true)
+				setNumberOfPlayers(parseInt(event.target.value))}}>
+				<option value={0}>No. of Players</option>
 				<option value={1}>1</option>
 				<option value={2}>2</option>
 				<option value={3}>3</option>
 				<option value={4}>4</option>
 			</select>
-			<button className="deal-button" onClick={() => handleDrawCards()}>
+			<button className="deal-button" disabled={!playersSelected} onClick={() => handleDrawCards()}>
 				Deal
 			</button>
 			<p>

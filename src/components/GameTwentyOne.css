@@ -13,9 +13,21 @@ img {
 	grid-template-columns: 1fr 1fr;
 }
 
+.home-button {
+	background-color: rgb(202, 16, 131);
+	border-radius: 4px;
+	color: white;
+	margin-bottom: 20px;
+}
+
 .deal-button {
 	background-color: rgb(202, 16, 131);
 	border-radius: 4px;
 	color: white;
 	margin-left: 10px;
+}
+
+.deal-button:disabled{
+	background-color: rgb(230, 107, 183);
+	
 }
