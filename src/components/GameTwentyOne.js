@@ -3,7 +3,7 @@ import './GameTwentyOne.css';
 import Player from './Player.js';
 import backOfCard from '../assets/back_of_card.png';
 
-const GameTwentyOne = () => {
+const GameTwentyOne = ({  setCurrentGame  }) => {
 	let thing = [
 		{
 			code: '0S',
@@ -522,7 +522,8 @@ const GameTwentyOne = () => {
 
 	return (
 		<div className="blackjack-container">
-			<h1>Game Twenty-One</h1>
+			<h1>Twenty-One</h1>
+			<button onClick={() => setCurrentGame("")}>Home</button>
 			<select onChange={(event) => setNumberOfPlayers(parseInt(event.target.value))}>
 				<option>No. of Players</option>
 				<option value={1}>1</option>
