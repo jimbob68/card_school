@@ -104,19 +104,25 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 
 	useEffect(
 		() => {
-			if (computerScore <= 16 && playerNumberTurn === 0) {
-				let cards = [ ...computerHand ];
-				const cardDrawn = handleTwist(0);
-				cards.push(cardDrawn);
-				setComputerScore(calculateScore(cards));
-			} else if (playerNumberTurn === 0) {
-				setTimeout(() => {
-					setModalIsOpen(true)
-					handleEndRound()
-				}, 1000);
-			}
+			// setTimeout(() => {
+
+				if (computerScore <= 16 && playerNumberTurn === 0) {
+					setTimeout(() => {
+						let cards = [ ...computerHand ];
+						const cardDrawn = handleTwist(0);
+						cards.push(cardDrawn);
+						setComputerScore(calculateScore(cards));
+					}, 2000);
+
+				} else if (playerNumberTurn === 0) {
+					setTimeout(() => {
+						setModalIsOpen(true)
+						handleEndRound()
+					}, 2000);
+				}
+			// }, 1000);
 		},
-		[ computerHand, computerScore ]
+		[ computerScore ]
 	);
 
 	useEffect(

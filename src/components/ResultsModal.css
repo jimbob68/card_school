@@ -17,4 +17,16 @@
     left: 20%;
     right: 20%;
     bottom: 20%;
+    overflow: scroll;
+}
+
+@media screen and ( max-width: 420px){ 
+   .modal {
+        font-size: 18px;
+        padding: 10px;
+        top: 5%;
+        left: 5%;
+        right: 5%;
+        bottom: 5%;
+   } 
 }
