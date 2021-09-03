@@ -84,6 +84,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 	const [ modalIsOpen, setModalIsOpen ] = useState(false)
 	const [ resultsState, setResultsState ] = useState([])
 	const [ imageSize, setImageSize ] = useState("medium")
+	const [ dealButtonDisabled, setDealButtonDisabled ] = useState(false)
 
 
 	useEffect(() => {
@@ -227,6 +228,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		setPlayerOneHand(deck.slice(2, 4));
 		setPlayerOneBet(5);
 		setPlayerOneWallet(playerOneWallet - 5);
+		if(numberOfPlayers > 1) setDealButtonDisabled(true)
 
 		if (numberOfPlayers >= 2) {
 			setPlayerTwoBet(5);
@@ -392,7 +394,6 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				betAmount = playerOneBet / 2;
 			}
 			resultsVariable.push('Player One beats the Dealer with a score of ' + playerOneScore +   ' and wins £' + betAmount * 2 + '!')
-			// alert('Player One beats the Dealer and wins £' + betAmount * 2 + '!');
 			playerOneBank += betAmount * 2;
 		} else if (playerOneScore === computerScore && playerOneScore <= 21) {
 			computerWins = false;
@@ -401,7 +402,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				betAmount = playerOneBet / 2;
 			}
 			resultsVariable.push('Player One draws with the Dealer with a score of ' + playerOneScore +   ' and gets £' + betAmount + '!')
-			// alert('Player One draws with the Dealer and gets £' + betAmount + '!');
+
 			playerOneBank += betAmount;
 		}
 		if (
@@ -414,7 +415,6 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				betAmount = playerTwoBet / 2;
 			}
 			resultsVariable.push('Player Two beats the Dealer with a score of ' + playerTwoScore +   ' and wins £' + betAmount * 2 + '!')
-			// alert('Player Two beats the Dealer and wins £' + betAmount * 2 + '!');
 			playerTwoBank += betAmount * 2;
 		} else if (playerTwoScore === computerScore && playerTwoScore <= 21) {
 			computerWins = false;
@@ -423,7 +423,6 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				betAmount = playerTwoBet / 2;
 			}
 			resultsVariable.push('Player Two draws with the Dealer with a score of ' + playerTwoScore +   ' and gets £' + betAmount + '!')
-			// alert('Player Two draws with the Dealer and gets £' + betAmount + '!');
 			playerTwoBank += betAmount;
 		}
 		if (
@@ -437,7 +436,6 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				betAmount = playerThreeBet / 2;
 			}
 			resultsVariable.push('Player Three beats the Dealer with a score of ' + playerThreeScore +   ' and wins £' + betAmount * 2 + '!')
-			// alert('Player Three beats the Dealer and wins £' + betAmount * 2 + '!');
 			playerThreeBank += betAmount * 2;
 		} else if (playerThreeScore === computerScore && playerThreeScore <= 21) {
 			computerWins = false;
@@ -446,7 +444,6 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				betAmount = playerThreeBet / 2;
 			}
 			resultsVariable.push('Player Three draws with the Dealer with a score of ' + playerThreeScore +   ' and gets £' + betAmount + '!')
-			// alert('Player Three draws with the Dealer and gets £' + betAmount + '!');
 			playerThreeBank += betAmount;
 		}
 		if (
@@ -460,7 +457,6 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				betAmount = playerFourBet / 2;
 			}
 			resultsVariable.push('Player Four beats the Dealer with a score of ' + playerFourScore +   ' and wins £' + betAmount * 2 + '!')
-			// alert('Player Four beats the Dealer and wins £' + betAmount * 2 + '!');
 			playerFourBank += betAmount * 2;
 		} else if (playerFourScore === computerScore && playerFourScore <= 21) {
 			computerWins = false;
@@ -469,7 +465,6 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				betAmount = playerFourBet / 2;
 			}
 			resultsVariable.push('Player Four draws with the Dealer with a score of ' + playerFourScore +   ' and gets £' + betAmount + '!')
-			// alert('Player Four draws with the Dealer and gets £' + betAmount + '!');
 			playerFourBank += betAmount;
 		}
 
@@ -479,12 +474,10 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		) {
 			computerWins = false;
 			resultsVariable.push("Player One's second hand beats the Dealer with a score of " + playerOneSplitScore +   " and wins £" + playerOneBet + '!')
-			// alert("Player One's second hand beats the Dealer and wins £" + playerOneBet + '!');
 			playerOneBank += playerOneBet;
 		} else if (playerOneSplitScore === computerScore && playerOneSplitScore <= 21) {
 			computerWins = false;
 			resultsVariable.push("Player One's second hand draws with the Dealer with a score of " + playerOneSplitScore +   "  and gets £" + playerOneBet / 2 + '!')
-			// alert("Player One's second hand draws with the Dealer and gets £" + playerOneBet / 2 + '!');
 			playerOneBank += playerOneBet / 2;
 		}
 		if (
@@ -494,12 +487,10 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		) {
 			computerWins = false;
 			resultsVariable.push("Player Two's second hand beats the Dealer with a score of " + playerTwoSplitScore +   " and wins £" + playerTwoBet + '!')
-			// alert("Player Two's second hand beats the Dealer and wins £" + playerTwoBet + '!');
 			playerTwoBank += playerTwoBet;
 		} else if (playerTwoSplitScore === computerScore && playerTwoSplitScore <= 21) {
 			computerWins = false;
 			resultsVariable.push("Player Two's second hand draws with the Dealer with a score of " + playerTwoSplitScore +   " and gets £" + playerTwoBet / 2 + '!')
-			// alert("Player Two's second hand draws with the Dealer and gets £" + playerTwoBet / 2 + '!');
 			playerTwoBank += playerTwoBet / 2;
 		}
 		if (
@@ -509,12 +500,10 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		) {
 			computerWins = false;
 			resultsVariable.push("Player Three's second hand beats the Dealer with a score of " + playerThreeSplitScore +   " and wins £" + playerThreeBet + '!')
-			// alert("Player Three's second hand beats the Dealer and wins £" + playerThreeBet + '!');
 			playerThreeBank += playerThreeBet;
 		} else if (playerThreeSplitScore === computerScore && playerThreeSplitScore <= 21) {
 			computerWins = false;
 			resultsVariable.push("Player Three's second hand draws with the Dealer with a score of " + playerThreeSplitScore +   " and gets £" + playerThreeBet / 2 + '!')
-			// alert("Player Three's second hand draws with the Dealer and gets £" + playerThreeBet / 2 + '!');
 			playerThreeBank += playerThreeBet / 2;
 		}
 		if (
@@ -524,18 +513,15 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		) {
 			computerWins = false;
 			resultsVariable.push("Player Four's second hand beats the Dealer with a score of " + playerFourSplitScore +   " and wins £" + playerFourBet + '!')
-			// alert("Player Four's second hand beats the Dealer and wins £" + playerFourBet + '!');
 			playerFourBank += playerFourBet;
 		} else if (playerFourSplitScore === computerScore && playerFourSplitScore <= 21) {
 			computerWins = false;
 			resultsVariable.push("Player Four's second hand draws with the Dealer with a score of " + playerFourSplitScore +   " and gets £" + playerFourBet / 2 + '!')
-			// alert("Player Four's second hand draws with the Dealer and gets £" + playerFourBet / 2 + '!');
 			playerFourBank += playerFourBet / 2;
 		}
 
 		if (computerWins) {
 			resultsVariable.push('Dealer wins!')
-			// alert('Dealer wins!');
 		}
 		setPlayerOneBet(0);
 		setPlayerTwoBet(0);
@@ -547,6 +533,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		setPlayerFourWallet(playerFourBank);
 		resultsVariable.unshift('Dealer score ' + computerScore)
 		setResultsState(resultsVariable)
+		setDealButtonDisabled(false)
 	};
 
 	const handlePlaceBet = (amount) => {
@@ -597,6 +584,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		setPlayerTwoSplitHand([])
 		setPlayerThreeSplitHand([])
 		setPlayerFourSplitHand([])
+		setDealButtonDisabled(false)
 	}
 
 	return (
@@ -622,7 +610,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				<option value={3}>3</option>
 				<option value={4}>4</option>
 			</select>
-			<button className="deal-button" disabled={!playersSelected} onClick={() => {
+			<button className="deal-button" disabled={!playersSelected || dealButtonDisabled}  onClick={() => {
 				setNewGameButtonDisplayed(true)
 			handleDrawCards()}}>
 				Deal
