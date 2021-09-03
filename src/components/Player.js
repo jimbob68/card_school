@@ -28,7 +28,7 @@ const Player = ({
 		}
 		if (splitHand.length > 0) {
 			cardImages.push( displayButtons() )
-			cardImages.push(<p>first split hand score: {calculateScore(hand, false)}</p>);
+			cardImages.push(<p id={playerNumber + 0.5}>first split hand score: {calculateScore(hand, false)}</p>);
 			splitHand.forEach((card) => {
 				cardImages.push(<img className={imageSize} src={card.image} alt={card.code} />);
 			});
@@ -90,7 +90,7 @@ const Player = ({
 	};
 
 	return (
-		<div>
+		<div className="player-container" id={playerNumber}>
 			<p>Player { playerNumber } - Wallet: £{ playerWallet } - Bet: £{ playerBet }</p>
 			{displayCards(hand, playerNumber)}
 			{ (splitHand.length === 0 || (splitHand.length > 0 && playerNumberTurn % 1 === 0.5)) && displayButtons() }

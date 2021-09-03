@@ -8,3 +8,7 @@
 .twist-stick-button:disabled {
 	background-color: rgb(172, 186, 216);
 }
+
+.player-container {
+	padding-top: 20px;
+}

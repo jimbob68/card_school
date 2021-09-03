@@ -106,10 +106,10 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 	useEffect(
 		() => {
 			// setTimeout(() => {
-				if(computerHand.length > 1 && playerNumberTurn === 0){
-				const dealerDivElement = document.getElementById('dealer-anchor');
-      			dealerDivElement.scrollIntoView({ behavior: 'smooth' });
-				}
+				// if(computerHand.length > 1 && playerNumberTurn === 0){
+				// const dealerDivElement = document.getElementById('dealer-anchor');
+      			// dealerDivElement.scrollIntoView({ behavior: 'smooth' });
+				// }
 
 				if (computerScore <= 16 && playerNumberTurn === 0) {
 					setTimeout(() => {
@@ -117,13 +117,13 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 						const cardDrawn = handleTwist(0);
 						cards.push(cardDrawn);
 						setComputerScore(calculateScore(cards));
-					}, 2000);
+					}, 1500);
 
 				} else if (playerNumberTurn === 0) {
 					setTimeout(() => {
 						setModalIsOpen(true)
 						handleEndRound()
-					}, 2000);
+					}, 1500);
 				}
 			// }, 1000);
 		},
@@ -309,32 +309,43 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 
 	const handleStick = () => {
 		let buttonsDisplayed = true;
-
+		let targetElement
 		document.getElementById('bet-dropdown').selectedIndex = 0;
 		if (playerNumberTurn === 1 && playerOneSplitHand.length > 0) {
 			setPlayerNumberTurn(1.5);
+			targetElement = document.getElementById(1);
+      		
 			buttonsDisplayed = false;
 		} else if (playerNumberTurn === 2 && playerTwoSplitHand.length > 0) {
 			setPlayerNumberTurn(2.5);
+			targetElement = document.getElementById(2);
 			buttonsDisplayed = false;
 		} else if (playerNumberTurn === 3 && playerThreeSplitHand.length > 0) {
 			setPlayerNumberTurn(3.5);
+			targetElement = document.getElementById(3);
 			buttonsDisplayed = false;
 		} else if (playerNumberTurn === 4 && playerFourSplitHand.length > 0) {
 			setPlayerNumberTurn(4.5);
+			targetElement = document.getElementById(4);
 			buttonsDisplayed = false;
 		} else if (playerNumberTurn === 1.5 && numberOfPlayers > 1) {
 			setPlayerNumberTurn(2);
+			targetElement = document.getElementById(2);
 		} else if (playerNumberTurn === 2.5 && numberOfPlayers > 2) {
 			setPlayerNumberTurn(3);
+			targetElement = document.getElementById(3);
 		} else if (playerNumberTurn === 3.5 && numberOfPlayers > 3) {
 			setPlayerNumberTurn(4);
+			targetElement = document.getElementById(4);
 		} else if (playerNumberTurn >= numberOfPlayers) {
+			targetElement = document.getElementById('dealer-anchor')
 			setPlayerNumberTurn(0);
 			setComputerScore(calculateScore(computerHand));
 		} else {
 			setPlayerNumberTurn(playerNumberTurn + 1);
+			targetElement = document.getElementById(playerNumberTurn + 1);
 		}
+		targetElement.scrollIntoView({ behavior: 'smooth' });
 		setAreButtonsDisabled(buttonsDisplayed);
 	};
 
