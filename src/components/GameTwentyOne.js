@@ -83,6 +83,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 	const [ newGameButtonDisplayed, setNewGameButtonDisplayed ] = useState(false)
 	const [ modalIsOpen, setModalIsOpen ] = useState(false)
 	const [ resultsState, setResultsState ] = useState([])
+	const [ imageSize, setImageSize ] = useState("medium")
 
 
 	useEffect(() => {
@@ -105,6 +106,10 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 	useEffect(
 		() => {
 			// setTimeout(() => {
+				if(computerHand.length > 1 && playerNumberTurn === 0){
+				const dealerDivElement = document.getElementById('dealer-anchor');
+      			dealerDivElement.scrollIntoView({ behavior: 'smooth' });
+				}
 
 				if (computerScore <= 16 && playerNumberTurn === 0) {
 					setTimeout(() => {
@@ -122,7 +127,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				}
 			// }, 1000);
 		},
-		[ computerScore ]
+		[ computerScore, playerNumberTurn ]
 	);
 
 	useEffect(
@@ -268,10 +273,10 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 	const displayComputerCards = () => {
 		let cardImages = [];
 		if (playerNumberTurn === 0) {
-			cardImages = computerHand.map((card) => <img src={card.image} alt={card.code} />);
+			cardImages = computerHand.map((card) => <img className={imageSize} src={card.image} alt={card.code} />);
 		} else {
-			cardImages.push(<img src={computerHand[0].image} alt={computerHand[0].code} />);
-			cardImages.push(<img src={backOfCard} alt="Back of card" />);
+			cardImages.push(<img className={imageSize} src={computerHand[0].image} alt={computerHand[0].code} />);
+			cardImages.push(<img className={imageSize} src={backOfCard} alt="Back of card" />);
 		}
 		return <div className="player-hand">{cardImages}</div>;
 	};
@@ -587,6 +592,14 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		<div className="blackjack-container">
 			<h1>Twenty-One</h1>
 			<button className="home-button" onClick={() => setCurrentGame("")}>Home</button>
+			<select value={imageSize} onChange={(event) => {
+				
+				setImageSize(event.target.value)}}>
+				<option selected="selected" value={"medium"}>Card size</option>
+				<option value={"small"}>small</option>
+				<option value={"medium"}>medium</option>
+				<option value={"large"}>large</option>
+			</select>
 			<br/>
 			{ newGameButtonDisplayed && <button className="new-game-button" onClick={() => handleNewGame()}>New Game</button>}
 			<select value={numberOfPlayers} onChange={(event) => {
@@ -636,6 +649,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 					areButtonsDisabled={areButtonsDisabled}
 					playerWallet={playerOneWallet}
 					playerBet={playerOneBet}
+					imageSize={imageSize}
 				/>}
 
 				{numberOfPlayers > 1 && (
@@ -653,6 +667,8 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 						areButtonsDisabled={areButtonsDisabled}
 						playerWallet={playerTwoWallet}
 						playerBet={playerTwoBet}
+						imageSize={imageSize}
+
 					/>
 				)}
 				{numberOfPlayers > 2 && (
@@ -670,6 +686,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 						areButtonsDisabled={areButtonsDisabled}
 						playerWallet={playerThreeWallet}
 						playerBet={playerThreeBet}
+						imageSize={imageSize}
 					/>
 				)}
 				{numberOfPlayers > 3 && (
@@ -687,12 +704,14 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 						areButtonsDisabled={areButtonsDisabled}
 						playerWallet={playerFourWallet}
 						playerBet={playerFourBet}
+						imageSize={imageSize}
 					/>
 				)}
 				{ numberOfPlayers > 0 && <div>
 					<p>Dealer</p>
 					{computerHand.length > 0 && displayComputerCards()}
-					{computerHand.length > 0 && calculateScore(computerHand, true)}
+					{/* {computerHand.length > 0 && calculateScore(computerHand, true)} */}
+					{computerHand.length > 0 && <p id="dealer-anchor" >{calculateScore(computerHand, true)}</p>}
 				</div>}
 
 

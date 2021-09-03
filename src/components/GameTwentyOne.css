@@ -4,9 +4,20 @@
 	min-height: 100vh;
 }
 
-img {
+.small {
+	width: 60px;
+}
+
+.medium {
+	width: 80px;
+}
+.large {
 	width: 100px;
 }
+
+/* img {
+	width: 100px;
+} */
 
 .hands-container {
 	display: grid;
@@ -37,4 +48,18 @@ img {
 	border-radius: 4px;
 	color: white;
 	margin-right: 10px;
+}
+
+@media screen and (max-width: 420px){
+	.hands-container {
+	
+	grid-template-columns: 1fr;
+
+}
+img {
+	width: 60px;
+}
+
+
+
 }

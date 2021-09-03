@@ -14,13 +14,14 @@ const Player = ({
 	handlePlaceBet,
 	areButtonsDisabled,
 	playerWallet,
-	playerBet
+	playerBet,
+	imageSize
 }) => {
 
 
 
 	const displayCards = (hand, playerNumber) => {
-		const cardImages = hand.map((card) => <img src={card.image} alt={card.code} />);
+		const cardImages = hand.map((card) => <img className={imageSize} src={card.image} alt={card.code} />);
 
 		if (hand.length === 2 && hand[0].value === hand[1].value && playerNumberTurn === playerNumber && splitHand.length === 0) {
 			cardImages.push(<button className="twist-stick-button" disabled={ areButtonsDisabled }onClick={() => handleSplit(playerNumberTurn)}>Split</button>);
@@ -29,7 +30,7 @@ const Player = ({
 			cardImages.push( displayButtons() )
 			cardImages.push(<p>first split hand score: {calculateScore(hand, false)}</p>);
 			splitHand.forEach((card) => {
-				cardImages.push(<img src={card.image} alt={card.code} />);
+				cardImages.push(<img className={imageSize} src={card.image} alt={card.code} />);
 			});
 			cardImages.push(<p>second split hand score: {calculateScore(splitHand, false)}</p>);
 			if( playerNumberTurn % 1 !== 0 ){
