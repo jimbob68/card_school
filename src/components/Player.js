@@ -90,7 +90,10 @@ const Player = ({
 	};
 
 	return (
-		<div className="player-container" id={playerNumber}>
+		<div 
+		// className="player-container" id={playerNumber}
+		id={playerNumber} className={(Math.floor(playerNumberTurn) === playerNumber && hand.length > 1) ? "active-player" : "player-container"}
+		>
 			<p>Player { playerNumber } - Wallet: £{ playerWallet } - Bet: £{ playerBet }</p>
 			{displayCards(hand, playerNumber)}
 			{ (splitHand.length === 0 || (splitHand.length > 0 && playerNumberTurn % 1 === 0.5)) && displayButtons() }
@@ -122,5 +125,7 @@ const Player = ({
 		</div>
 	);
 };
+
+
 
 export default Player;

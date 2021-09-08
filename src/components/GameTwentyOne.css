@@ -1,7 +1,11 @@
 .blackjack-container {
-	background-color: darkgreen;
+	background-color: #006400;
 	color: white;
 	min-height: 100vh;
+}
+.blackjack-container h1 {
+	margin: 0;
+	padding: 20px;
 }
 
 .small {

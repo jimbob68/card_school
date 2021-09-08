@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './GameTwentyOne.css';
 import Player from './Player.js';
+import './Player.css'
 import ResultsModal from './ResultsModal.js';
 import backOfCard from '../assets/back_of_card.png';
 
@@ -706,7 +707,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 						imageSize={imageSize}
 					/>
 				)}
-				{ numberOfPlayers > 0 && <div>
+				{ numberOfPlayers > 0 && <div className={playerNumberTurn === 0 ? "active-player" : "player-container"}>
 					<p>Dealer</p>
 					{computerHand.length > 0 && displayComputerCards()}
 					{/* {computerHand.length > 0 && calculateScore(computerHand, true)} */}
