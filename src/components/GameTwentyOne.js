@@ -8,23 +8,23 @@ import backOfCard from '../assets/back_of_card.png';
 const GameTwentyOne = ({  setCurrentGame  }) => {
 	let thing = [
 		{
-			code: '0S',
-			image: 'https://deckofcardsapi.com/static/img/0S.png',
+			code: 'AS',
+			image: 'https://deckofcardsapi.com/static/img/AS.png',
 			images: {
-				svg: 'https://deckofcardsapi.com/static/img/0S.svg',
-				png: 'https://deckofcardsapi.com/static/img/0S.png'
+				svg: 'https://deckofcardsapi.com/static/img/AS.svg',
+				png: 'https://deckofcardsapi.com/static/img/AS.png'
 			},
-			value: '10',
+			value: 'ACE',
 			suit: 'SPADES'
 		},
 		{
-			code: '0C',
-			image: 'https://deckofcardsapi.com/static/img/0C.png',
+			code: '5C',
+			image: 'https://deckofcardsapi.com/static/img/5C.png',
 			images: {
-				svg: 'https://deckofcardsapi.com/static/img/0C.svg',
-				png: 'https://deckofcardsapi.com/static/img/0C.png'
+				svg: 'https://deckofcardsapi.com/static/img/5C.svg',
+				png: 'https://deckofcardsapi.com/static/img/5C.png'
 			},
-			value: '10',
+			value: '5',
 			suit: 'CLUBS'
 		}
 	];
@@ -63,7 +63,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 	// const [ playerThreeHand, setPlayerThreeHand ] = useState(thing);
 	// const [ playerFourHand, setPlayerFourHand ] = useState(thing);
 	const [ computerHand, setComputerHand ] = useState([]);
-	// const [ computerHand, setComputerHand ] = useState(otherThing);
+	// const [ computerHand, setComputerHand ] = useState(thing);
 	const [ playerNumberTurn, setPlayerNumberTurn ] = useState(1);
 	const [ numberOfPlayers, setNumberOfPlayers ] = useState(0);
 	const [ computerScore, setComputerScore ] = useState(0);
@@ -86,6 +86,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 	const [ resultsState, setResultsState ] = useState([])
 	const [ imageSize, setImageSize ] = useState("medium")
 	const [ dealButtonDisabled, setDealButtonDisabled ] = useState(false)
+	const [ computerHandLength, setComputerHandLength ] = useState(computerHand.length)
 
 
 	useEffect(() => {
@@ -118,7 +119,12 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 						let cards = [ ...computerHand ];
 						const cardDrawn = handleTwist(0);
 						cards.push(cardDrawn);
+						// let newScore = calculateScore(cards)
+						// if (newScore === computerScore) newScore += 0.5
+						// console.log("newScore", newScore)
+						// setComputerScore(newScore);
 						setComputerScore(calculateScore(cards));
+						setComputerHandLength(cards.length)
 					}, 1500);
 
 				} else if (playerNumberTurn === 0) {
@@ -129,7 +135,8 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				}
 			// }, 1000);
 		},
-		[ computerScore, playerNumberTurn ]
+		// [ computerScore, playerNumberTurn ]
+		[ computerHandLength, playerNumberTurn, computerScore ]
 	);
 
 	useEffect(
