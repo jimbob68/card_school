@@ -86,7 +86,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 	const [ resultsState, setResultsState ] = useState([])
 	const [ imageSize, setImageSize ] = useState("medium")
 	const [ dealButtonDisabled, setDealButtonDisabled ] = useState(false)
-	const [ computerHandLength, setComputerHandLength ] = useState(computerHand.length)
+	// const [ computerHandLength, setComputerHandLength ] = useState(computerHand.length)
 
 
 	useEffect(() => {
@@ -114,17 +114,17 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
       			// dealerDivElement.scrollIntoView({ behavior: 'smooth' });
 				// }
 
-				if (computerScore <= 16 && playerNumberTurn === 0) {
+				if (computerScore < 17 && playerNumberTurn === 0) {
 					setTimeout(() => {
 						let cards = [ ...computerHand ];
 						const cardDrawn = handleTwist(0);
 						cards.push(cardDrawn);
-						// let newScore = calculateScore(cards)
-						// if (newScore === computerScore) newScore += 0.5
-						// console.log("newScore", newScore)
-						// setComputerScore(newScore);
-						setComputerScore(calculateScore(cards));
-						setComputerHandLength(cards.length)
+						let newScore = calculateScore(cards)
+						if (newScore === computerScore) newScore += 0.5
+						console.log("newScore", newScore)
+						setComputerScore(newScore);
+						// setComputerScore(calculateScore(cards));
+						// setComputerHandLength(cards.length)
 					}, 1500);
 
 				} else if (playerNumberTurn === 0) {
@@ -135,8 +135,8 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				}
 			// }, 1000);
 		},
-		// [ computerScore, playerNumberTurn ]
-		[ computerHandLength, playerNumberTurn, computerScore ]
+		[ computerScore, playerNumberTurn ]
+		// [ computerHandLength, playerNumberTurn, computerScore ]
 	);
 
 	useEffect(
