@@ -35,7 +35,7 @@ const ResultsModal = (  {
         {/* <p><u>Results</u></p> */}
         {/* {resultsState} */}
         {displayResults()}
-        <button onClick={() => handleClose() }>Close</button>
+        <button className="close-button" onClick={() => handleClose() }>Close</button>
         </Modal>
     )
 }

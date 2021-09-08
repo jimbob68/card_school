@@ -623,24 +623,26 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 			handleDrawCards()}}>
 				Deal
 			</button>
-			{ numberOfPlayers > 0 && <p>
-				Player One: £{playerOneWallet} - Bet: £{playerOneBet}
-			</p>}
-			{numberOfPlayers > 1 && (
-				<p>
-					Player Two: £{playerTwoWallet} - Bet: £{playerTwoBet}
-				</p>
-			)}
-			{numberOfPlayers > 2 && (
-				<p>
-					Player Three: £{playerThreeWallet} - Bet: £{playerThreeBet}
-				</p>
-			)}
-			{numberOfPlayers > 3 && (
-				<p>
-					Player Four: £{playerFourWallet} - Bet: £{playerFourBet}
-				</p>
-			)}
+			<div className="player-score-header" >
+				{ numberOfPlayers > 0 && <p>
+					Player One: £{playerOneWallet} - Bet: £{playerOneBet}
+				</p>}
+				{numberOfPlayers > 1 && (
+					<p>
+						Player Two: £{playerTwoWallet} - Bet: £{playerTwoBet}
+					</p>
+				)}
+				{numberOfPlayers > 2 && (
+					<p>
+						Player Three: £{playerThreeWallet} - Bet: £{playerThreeBet}
+					</p>
+				)}
+				{numberOfPlayers > 3 && (
+					<p>
+						Player Four: £{playerFourWallet} - Bet: £{playerFourBet}
+					</p>
+				)}
+			</div>
 			<div className="hands-container">
 				{ numberOfPlayers > 0 && <Player
 					hand={playerOneHand}

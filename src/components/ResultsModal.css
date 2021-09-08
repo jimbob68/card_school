@@ -18,7 +18,17 @@
     right: 20%;
     bottom: 20%;
     overflow: scroll;
+    border-radius: 10px;
+    border: solid 2px white;
 }
+
+.close-button {
+
+	background-color: rgb(202, 16, 131);
+	border-radius: 4px;
+	color: white;
+}
+
 
 @media screen and ( max-width: 420px){ 
    .modal {
