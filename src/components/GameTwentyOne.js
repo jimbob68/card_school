@@ -355,7 +355,8 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 			setPlayerNumberTurn(playerNumberTurn + 1);
 			targetElement = document.getElementById(playerNumberTurn + 1);
 		}
-		targetElement.scrollIntoView({ behavior: 'smooth' });
+		// targetElement.scrollIntoView({ behavior: 'smooth' });
+		setTimeout(() => targetElement.scrollIntoView({ behavior: 'smooth' }), 500)
 		setAreButtonsDisabled(buttonsDisplayed);
 	};
 
