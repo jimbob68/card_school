@@ -4,6 +4,7 @@ import Player from './Player.js';
 import './Player.css'
 import ResultsModal from './ResultsModal.js';
 import backOfCard from '../assets/back_of_card.png';
+import RulesOfTwentyOne from './RulesOfTwentyOne.js';
 
 const GameTwentyOne = ({  setCurrentGame  }) => {
 	let thing = [
@@ -86,6 +87,7 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 	const [ resultsState, setResultsState ] = useState([])
 	const [ imageSize, setImageSize ] = useState("medium")
 	const [ dealButtonDisabled, setDealButtonDisabled ] = useState(false)
+	const [  rulesModalIsOpen, setRulesModalIsOpen ] = useState(false)
 	// const [ computerHandLength, setComputerHandLength ] = useState(computerHand.length)
 
 
@@ -164,34 +166,28 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 			} else if (calculateScore(playerThreeHand) > 21 && playerNumberTurn === 3) {
 				setAreButtonsDisabled(true)
 				isBust = true;
-				
 			} else if (calculateScore(playerFourHand) > 21 && playerNumberTurn === 4) {
 				setAreButtonsDisabled(true)
 				isBust = true;
-				
 			} else if (calculateScore(playerOneSplitHand) > 21 && playerNumberTurn === 1.5) {
 				setAreButtonsDisabled(true)
 				isBust = true;
-				
 			} else if (calculateScore(playerTwoSplitHand) > 21 && playerNumberTurn === 2.5) {
 				setAreButtonsDisabled(true)
 				isBust = true;
-				
 			} else if (calculateScore(playerThreeSplitHand) > 21 && playerNumberTurn === 3.5) {
 				setAreButtonsDisabled(true)
 				isBust = true;
-				
 			} else if (calculateScore(playerFourSplitHand) > 21 && playerNumberTurn === 4.5) {
 				setAreButtonsDisabled(true)
 				isBust = true;
-				
 			}
 			if(isBust){
 				setTimeout(() => {
 					setResultsState(['You are bust better luck next time!'])
 					setModalIsOpen(true)
-			}, 1500)
-		}
+				}, 1500)
+			}
 		},
 		[
 			playerOneHand,
@@ -556,10 +552,10 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		if (computerWins) {
 			resultsVariable.push('Dealer wins!')
 		}
-		setPlayerOneBet(0);
-		setPlayerTwoBet(0);
-		setPlayerThreeBet(0);
-		setPlayerFourBet(0);
+		// setPlayerOneBet(0);
+		// setPlayerTwoBet(0);
+		// setPlayerThreeBet(0);
+		// setPlayerFourBet(0);
 		setPlayerOneWallet(playerOneBank);
 		setPlayerTwoWallet(playerTwoBank);
 		setPlayerThreeWallet(playerThreeBank);
@@ -624,6 +620,8 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		<div className="blackjack-container">
 			<h1>Twenty-One</h1>
 			<button className="home-button" onClick={() => setCurrentGame("")}>Home</button>
+
+			<button className="rules-button" onClick={() => setRulesModalIsOpen(true)}>Rules</button>
 			<select value={imageSize} onChange={(event) => {
 				
 				setImageSize(event.target.value)}}>
@@ -759,6 +757,9 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				//  playerNumber={playerNumber}
 				 playerNumber={playerNumberTurn}
 			/>}
+			<RulesOfTwentyOne  
+			rulesModalIsOpen={rulesModalIsOpen} 
+			setRulesModalIsOpen={setRulesModalIsOpen}/>
 		</div>
 	);
 };
