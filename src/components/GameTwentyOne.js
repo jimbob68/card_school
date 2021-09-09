@@ -123,6 +123,10 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 						if (newScore === computerScore) newScore += 0.5
 						console.log("newScore", newScore)
 						setComputerScore(newScore);
+						let targetElement = document.getElementById('dealer-anchor')
+						setTimeout(() => targetElement.scrollIntoView({ behavior: 'smooth' }), 100)
+						// targetElement.scrollIntoView({ behavior: 'smooth' })
+
 						// setComputerScore(calculateScore(cards));
 						// setComputerHandLength(cards.length)
 					}, 1500);
@@ -141,33 +145,53 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 
 	useEffect(
 		() => {
-			setTimeout(() => {
-				if (calculateScore(playerOneHand) > 21 && playerNumberTurn === 1) {
+			if(document.getElementById(1) && playerOneHand.length > 2){
+				let targetElement = document.getElementById(1)
+				setTimeout(() => targetElement.scrollIntoView({ behavior: 'smooth' }), 250)
+			}
+		}, [playerOneHand])
+
+	useEffect(
+		() => {
+			let isBust = false;
+		
+			if (calculateScore(playerOneHand) > 21 && playerNumberTurn === 1) {
+				setAreButtonsDisabled(true)
+				isBust = true;
+			} else if (calculateScore(playerTwoHand) > 21 && playerNumberTurn === 2) {
+				setAreButtonsDisabled(true)
+				isBust = true;
+			} else if (calculateScore(playerThreeHand) > 21 && playerNumberTurn === 3) {
+				setAreButtonsDisabled(true)
+				isBust = true;
+				
+			} else if (calculateScore(playerFourHand) > 21 && playerNumberTurn === 4) {
+				setAreButtonsDisabled(true)
+				isBust = true;
+				
+			} else if (calculateScore(playerOneSplitHand) > 21 && playerNumberTurn === 1.5) {
+				setAreButtonsDisabled(true)
+				isBust = true;
+				
+			} else if (calculateScore(playerTwoSplitHand) > 21 && playerNumberTurn === 2.5) {
+				setAreButtonsDisabled(true)
+				isBust = true;
+				
+			} else if (calculateScore(playerThreeSplitHand) > 21 && playerNumberTurn === 3.5) {
+				setAreButtonsDisabled(true)
+				isBust = true;
+				
+			} else if (calculateScore(playerFourSplitHand) > 21 && playerNumberTurn === 4.5) {
+				setAreButtonsDisabled(true)
+				isBust = true;
+				
+			}
+			if(isBust){
+				setTimeout(() => {
 					setResultsState(['You are bust better luck next time!'])
 					setModalIsOpen(true)
-				} else if (calculateScore(playerTwoHand) > 21 && playerNumberTurn === 2) {
-					setResultsState(['You are bust better luck next time!'])
-					setModalIsOpen(true)
-				} else if (calculateScore(playerThreeHand) > 21 && playerNumberTurn === 3) {
-					setResultsState(['You are bust better luck next time!'])
-					setModalIsOpen(true)
-				} else if (calculateScore(playerFourHand) > 21 && playerNumberTurn === 4) {
-					setResultsState(['You are bust better luck next time!'])
-					setModalIsOpen(true)
-				} else if (calculateScore(playerOneSplitHand) > 21 && playerNumberTurn === 1.5) {
-					setResultsState(['You are bust better luck next time!'])
-					setModalIsOpen(true)
-				} else if (calculateScore(playerTwoSplitHand) > 21 && playerNumberTurn === 2.5) {
-					setResultsState(['You are bust better luck next time!'])
-					setModalIsOpen(true)
-				} else if (calculateScore(playerThreeSplitHand) > 21 && playerNumberTurn === 3.5) {
-					setResultsState(['You are bust better luck next time!'])
-					setModalIsOpen(true)
-				} else if (calculateScore(playerFourSplitHand) > 21 && playerNumberTurn === 4.5) {
-					setResultsState(['You are bust better luck next time!'])
-					setModalIsOpen(true)
-				}
-			}, 500);
+			}, 1500)
+		}
 		},
 		[
 			playerOneHand,
