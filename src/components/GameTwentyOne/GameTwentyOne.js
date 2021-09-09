@@ -3,7 +3,7 @@ import './GameTwentyOne.css';
 import Player from './Player.js';
 import './Player.css'
 import ResultsModal from './ResultsModal.js';
-import backOfCard from '../assets/back_of_card.png';
+import backOfCard from '../../assets/back_of_card.png';
 import RulesOfTwentyOne from './RulesOfTwentyOne.js';
 
 const GameTwentyOne = ({  setCurrentGame  }) => {
