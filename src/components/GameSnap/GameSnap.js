@@ -6,8 +6,9 @@ const GameSnap = () => {
     const [ deckOfCards, setDeckOfCards ] = useState([])
     const [ computerScore, setComputerScore ] = useState(0)
     const [ playerScore, setPlayerScore ] = useState(0)
-    const [ currentCard, setCurrentCard ] = useState(0)
+    const [ currentCardIndex, setCurrentCardIndex ] = useState(0)
     const [ isDealing, setIsDealing ] = useState(false)
+    const [ displayedCard, setDisplayedCard ] = useState(null)
 
     useEffect(() => {
         fetch('https://deckofcardsapi.com/api/deck/new/shuffle?deck_count=1')
@@ -19,49 +20,55 @@ const GameSnap = () => {
         })
     },[])
 
-    useEffect(() => {
-        console.log("currentCard:", currentCard)
-        if(isDealing){
-            setTimeout(() => {
-            setCurrentCard(currentCard + 1)
-        }, 2000)
-        }
-    }, [currentCard, isDealing])
 
-    // useEffect(() => {
-    //     console.log("currentCard:", currentCard)
-    //     setTimeout(() => {
-    //         console.log("currentCard2:", currentCard)
-    //         setCurrentCard(deckOfCards[0])
-    //         setDeckOfCards(deckOfCards.slice(1))
-    //     }, 2000)
-    // }, [deckOfCards])
+    useEffect(() => {
+        if(isDealing){
+            setTimeout(() =>{
+                // console.log("current card index", currentCardIndex)
+                setCurrentCardIndex(currentCardIndex + 1)
+            }, 1500)
+        }
+    }, [displayedCard])
+
+
+    useEffect(() => {
+        if(isDealing){
+            setDisplayedCard(deckOfCards[currentCardIndex])
+        }
+    }, [currentCardIndex])
+
+
+
 
     const handleStartGame = () => {
-
-        // for(let i = 0; i < deckOfCards.length;){
-        //     setTimeout(() => {
-        //         setCurrentCard(deckOfCards[i])
-        //         i++
-            // }, 2000)
-        // }
+        setDisplayedCard(deckOfCards[0])
         setIsDealing(true)
-        // setDeckOfCards(deckOfCards.slice(1))
     }
 
-    const handleSnap = () => {
+
+    const handleSnap = (card) => {
         setIsDealing(false)
+        console.log("currentCard", deckOfCards[card])
+        console.log("previousCard", deckOfCards[card - 1])
+    }
+
+
+    const handleContinue = () => {
         setTimeout(() => {
-        setCurrentCard(currentCard - 1)
+            setIsDealing(true)
+            setDisplayedCard(deckOfCards[currentCardIndex])
         }, 1000)
+        
     }
 
     return(
         <div>
             <p>Snap</p>
             <button onClick={() => handleStartGame()}>Start Game</button>
-            {deckOfCards.length > 0 && <img src={ deckOfCards[currentCard].image} alt={currentCard.code}/>}
-            <button onClick={() => handleSnap()}>Snap</button>
+            {/* {deckOfCards.length > 0 && <img src={ deckOfCards[currentCard].image} alt={currentCard.code}/>} */}
+            {displayedCard && <img src={ displayedCard.image} alt={displayedCard.code}/>}
+            <button onClick={() => handleSnap(currentCardIndex)}>Snap</button>
+            <button onClick={() => handleContinue()}>Continue</button>
         </div>
     )
 }
