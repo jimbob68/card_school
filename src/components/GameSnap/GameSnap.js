@@ -25,7 +25,11 @@ const GameSnap = () => {
         if(isDealing){
            setTimeout(() =>{
                 console.log("current card index", currentCardIndex)
-                setCurrentCardIndex(currentCardIndex + 1)
+                if(currentCardIndex < 51){
+                    setCurrentCardIndex(currentCardIndex + 1)
+                } else {
+                    alert("Game over")
+                }
             }, 1500)
         }
     }, [displayedCard])
@@ -34,11 +38,13 @@ const GameSnap = () => {
     let computerHasSnapped = false;
 
     useEffect(() => {
+        const snapTime = Math.floor(Math.random() * (1400 - 600 + 1)) + 600
+        console.log("SnapTime:", snapTime)
         setTimeout(() => {
             if(currentCardIndex >= 1 && !playerHasSnapped){
                 handleComputerSnap(currentCardIndex)
             }
-        }, 1400)
+        }, snapTime)
     },[displayedCard, isDealing])
 
 
@@ -70,7 +76,6 @@ const GameSnap = () => {
         setIsDealing(false)
         const pointsWon = card - (computerScore + playerScore)
         if(deckOfCards[card].value === deckOfCards[card -1].value && !computerHasSnapped){
-            
             setPlayerScore(playerScore + pointsWon)
         } else {
             setComputerScore(computerScore + pointsWon)
