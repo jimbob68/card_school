@@ -9,6 +9,7 @@ const GameSnap = () => {
     const [ currentCardIndex, setCurrentCardIndex ] = useState(0)
     const [ isDealing, setIsDealing ] = useState(false)
     const [ displayedCard, setDisplayedCard ] = useState(null)
+    const [ imageSize, setImageSize ] = useState("medium")
 
     useEffect(() => {
         fetch('https://deckofcardsapi.com/api/deck/new/shuffle?deck_count=1')
@@ -99,9 +100,19 @@ const GameSnap = () => {
     return(
         <div>
             <p>Snap</p>
+
+            <select value={imageSize} onChange={(event) => {
+				
+				setImageSize(event.target.value)}}>
+				<option selected="selected" value={"medium"}>Card size</option>
+				<option value={"small"}>small</option>
+				<option value={"medium"}>medium</option>
+				<option value={"large"}>large</option>
+			</select>
+
             <button onClick={() => handleStartGame()}>Start Game</button>
             {/* {deckOfCards.length > 0 && <img src={ deckOfCards[currentCard].image} alt={currentCard.code}/>} */}
-            {displayedCard && <img src={ displayedCard.image} alt={displayedCard.code}/>}
+            {displayedCard && <img className={imageSize} src={ displayedCard.image} alt={displayedCard.code}/>}
             <button  disabled={!isDealing} onClick={() => handlePlayerSnap(currentCardIndex)}>Snap</button>
             <button onClick={() => handleContinue()}>Continue</button>
             <p>Player Score: {playerScore}</p>
