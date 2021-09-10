@@ -21,14 +21,25 @@ const GameSnap = () => {
     },[])
 
 
-    useEffect(() => {
+    useEffect(() => {       
         if(isDealing){
-            setTimeout(() =>{
-                // console.log("current card index", currentCardIndex)
+           setTimeout(() =>{
+                console.log("current card index", currentCardIndex)
                 setCurrentCardIndex(currentCardIndex + 1)
             }, 1500)
         }
     }, [displayedCard])
+
+    let playerHasSnapped = false;
+    let computerHasSnapped = false;
+
+    useEffect(() => {
+        setTimeout(() => {
+            if(currentCardIndex >= 1 && !playerHasSnapped){
+                handleComputerSnap(currentCardIndex)
+            }
+        }, 1400)
+    },[displayedCard, isDealing])
 
 
     useEffect(() => {
@@ -37,7 +48,15 @@ const GameSnap = () => {
         }
     }, [currentCardIndex])
 
-
+    const handleComputerSnap = (cardIndex) => {
+        const pointsWon = cardIndex - (computerScore + playerScore)
+        if(deckOfCards[cardIndex].value === deckOfCards[cardIndex - 1].value){
+            setIsDealing(false)
+            setComputerScore(computerScore + pointsWon)
+            computerHasSnapped = true
+        }
+        // console.log("cardIndex:", cardIndex)
+    }
 
 
     const handleStartGame = () => {
@@ -46,14 +65,25 @@ const GameSnap = () => {
     }
 
 
-    const handleSnap = (card) => {
+    const handlePlayerSnap = (card) => {
+        playerHasSnapped = true
         setIsDealing(false)
+        const pointsWon = card - (computerScore + playerScore)
+        if(deckOfCards[card].value === deckOfCards[card -1].value && !computerHasSnapped){
+            
+            setPlayerScore(playerScore + pointsWon)
+        } else {
+            setComputerScore(computerScore + pointsWon)
+        }
+        console.log("score:", card - (computerScore + playerScore))
         console.log("currentCard", deckOfCards[card])
         console.log("previousCard", deckOfCards[card - 1])
     }
 
 
     const handleContinue = () => {
+        computerHasSnapped = false
+        playerHasSnapped = false
         setTimeout(() => {
             setIsDealing(true)
             setDisplayedCard(deckOfCards[currentCardIndex])
@@ -67,8 +97,10 @@ const GameSnap = () => {
             <button onClick={() => handleStartGame()}>Start Game</button>
             {/* {deckOfCards.length > 0 && <img src={ deckOfCards[currentCard].image} alt={currentCard.code}/>} */}
             {displayedCard && <img src={ displayedCard.image} alt={displayedCard.code}/>}
-            <button onClick={() => handleSnap(currentCardIndex)}>Snap</button>
+            <button  disabled={!isDealing} onClick={() => handlePlayerSnap(currentCardIndex)}>Snap</button>
             <button onClick={() => handleContinue()}>Continue</button>
+            <p>Player Score: {playerScore}</p>
+            <p>Computer Score: {computerScore}</p>
         </div>
     )
 }
