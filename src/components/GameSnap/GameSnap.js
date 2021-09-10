@@ -9,7 +9,8 @@ const GameSnap = () => {
     const [ currentCardIndex, setCurrentCardIndex ] = useState(0)
     const [ isDealing, setIsDealing ] = useState(false)
     const [ displayedCard, setDisplayedCard ] = useState(null)
-    const [ imageSize, setImageSize ] = useState("medium")
+    // const [ imageSize, setImageSize ] = useState("medium")       // HOW IT WAS
+    const [ imageSize, setImageSize ] = useState("medium-snap")     // MY FIX
     const [ numberOfDecks, setNumberOfDecks ] = useState(1)
 
     useEffect(() => {
@@ -31,7 +32,8 @@ const GameSnap = () => {
         if(isDealing){
            setTimeout(() =>{
                 console.log("current card index", currentCardIndex)
-                if(currentCardIndex < (51 * numberOfDecks)){
+                // if(currentCardIndex < (51 * numberOfDecks)){                               // HOW IT WAS
+                if(currentCardIndex < ((51 * numberOfDecks) + (numberOfDecks - 1))){          // MY FIX
                     setCurrentCardIndex(currentCardIndex + 1)
                 } else {
                     alert("Game over")
