@@ -10,23 +10,28 @@ const GameSnap = () => {
     const [ isDealing, setIsDealing ] = useState(false)
     const [ displayedCard, setDisplayedCard ] = useState(null)
     const [ imageSize, setImageSize ] = useState("medium")
+    const [ numberOfDecks, setNumberOfDecks ] = useState(1)
 
     useEffect(() => {
-        fetch('https://deckofcardsapi.com/api/deck/new/shuffle?deck_count=1')
+        fetchDecks()
+    },[numberOfDecks])
+
+    const fetchDecks = () => {
+        fetch('https://deckofcardsapi.com/api/deck/new/shuffle?deck_count=' + numberOfDecks)
         .then(res => res.json())
         .then(results => {
-            fetch('https://deckofcardsapi.com/api/deck/' + results.deck_id + '/draw/?count=52')
+            fetch('https://deckofcardsapi.com/api/deck/' + results.deck_id + '/draw/?count=' + (52 * numberOfDecks))
             .then(res => res.json())
             .then(results => setDeckOfCards(results.cards))
         })
-    },[])
+    }
 
 
     useEffect(() => {       
         if(isDealing){
            setTimeout(() =>{
                 console.log("current card index", currentCardIndex)
-                if(currentCardIndex < 51){
+                if(currentCardIndex < (51 * numberOfDecks)){
                     setCurrentCardIndex(currentCardIndex + 1)
                 } else {
                     alert("Game over")
@@ -104,11 +109,18 @@ const GameSnap = () => {
             <select value={imageSize} onChange={(event) => {
 				
 				setImageSize(event.target.value)}}>
-				<option selected="selected" value={"medium"}>Card size</option>
-				<option value={"small"}>small</option>
-				<option value={"medium"}>medium</option>
-				<option value={"large"}>large</option>
+				<option selected="selected" value={"medium-snap"}>Card size</option>
+				<option value={"small-snap"}>small</option>
+				<option value={"medium-snap"}>medium</option>
+				<option value={"large-snap"}>large</option>
 			</select>
+
+            <select value={numberOfDecks} onChange={(event) => {setNumberOfDecks(event.target.value)}}>
+                <option value={1}>No. of decks</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+            </select>
 
             <button onClick={() => handleStartGame()}>Start Game</button>
             {/* {deckOfCards.length > 0 && <img src={ deckOfCards[currentCard].image} alt={currentCard.code}/>} */}

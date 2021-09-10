@@ -1,10 +1,10 @@
-.small {
+.small-snap {
 	width: 100px;
 }
 
-.medium {
+.medium-snap {
 	width: 150px;
 }
-.large {
+.large-snap {
 	width: 200px;
 }
