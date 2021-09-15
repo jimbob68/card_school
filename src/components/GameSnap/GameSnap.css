@@ -8,3 +8,23 @@
 .large-snap {
 	width: 200px;
 }
+.cards-container {
+	position: relative;
+}
+
+.cards-container img {
+	position: absolute;
+	
+}
+.card1 {
+	left: 0px;
+}
+.card2 {
+	left: 100px;
+}
+.above {
+	z-index: 1;
+}
+.below {
+	z-index: 0;
+}

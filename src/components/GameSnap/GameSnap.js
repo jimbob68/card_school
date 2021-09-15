@@ -8,10 +8,13 @@ const GameSnap = () => {
     const [ playerScore, setPlayerScore ] = useState(0)
     const [ currentCardIndex, setCurrentCardIndex ] = useState(0)
     const [ isDealing, setIsDealing ] = useState(false)
-    const [ displayedCard, setDisplayedCard ] = useState(null)
+    const [ displayedCard1, setDisplayedCard1 ] = useState(null)
+    const [ displayedCard2, setDisplayedCard2 ] = useState(null)
     // const [ imageSize, setImageSize ] = useState("medium")       // HOW IT WAS
     const [ imageSize, setImageSize ] = useState("medium-snap")     // MY FIX
     const [ numberOfDecks, setNumberOfDecks ] = useState(1)
+    const [ card1Styling, setCard1Styling ] = useState("above")
+    const [ card2Styling, setCard2Styling ] = useState("below")
 
     useEffect(() => {
         fetchDecks()
@@ -30,6 +33,21 @@ const GameSnap = () => {
 
     useEffect(() => {       
         if(isDealing){
+            if(currentCardIndex % 2 === 0){
+                setTimeout(() => {
+            //         setCard1Styling("above")
+            //         setCard2Styling("below")
+                    document.getElementById("card1").style.zIndex = 1
+                    document.getElementById("card2").style.zIndex = 0
+                }, 200)
+            }else {
+                setTimeout(() => {
+            //         setCard2Styling("above")
+            //         setCard1Styling("below")
+                    document.getElementById("card2").style.zIndex = 1
+                    document.getElementById("card1").style.zIndex = 0
+                }, 200)
+            }
            setTimeout(() =>{
                 console.log("current card index", currentCardIndex)
                 // if(currentCardIndex < (51 * numberOfDecks)){                               // HOW IT WAS
@@ -40,7 +58,7 @@ const GameSnap = () => {
                 }
             }, 1500)
         }
-    }, [displayedCard])
+    }, [displayedCard1, displayedCard2])
 
     let playerHasSnapped = false;
     let computerHasSnapped = false;
@@ -53,12 +71,37 @@ const GameSnap = () => {
                 handleComputerSnap(currentCardIndex)
             }
         }, snapTime)
-    },[displayedCard, isDealing])
+    },[displayedCard1, displayedCard2, isDealing])
 
 
     useEffect(() => {
         if(isDealing){
-            setDisplayedCard(deckOfCards[currentCardIndex])
+            if(currentCardIndex % 2 === 0){
+                setDisplayedCard1(deckOfCards[currentCardIndex])
+                // setTimeout(() => {
+                //     setCard1Styling("above")
+                //     setCard2Styling("below")
+                // }, 200)
+                
+                setTimeout(() => {
+                    document.getElementById("card1").style.zIndex = 1
+                    document.getElementById("card2").style.zIndex = 0
+                }, 200)
+                
+
+                console.log("current card index CARD1", currentCardIndex)
+            }else {
+                setDisplayedCard2(deckOfCards[currentCardIndex])
+                // setTimeout(() => {
+                //     setCard2Styling("above")
+                //     setCard1Styling("below")
+                // }, 200)
+                setTimeout(() => {
+                    document.getElementById("card2").style.zIndex = 1
+                    document.getElementById("card1").style.zIndex = 0
+                }, 200)
+                console.log("current card index CARD2", currentCardIndex)
+            }
         }
     }, [currentCardIndex])
 
@@ -74,7 +117,8 @@ const GameSnap = () => {
 
 
     const handleStartGame = () => {
-        setDisplayedCard(deckOfCards[0])
+        setDisplayedCard1(deckOfCards[0])
+        setDisplayedCard2(deckOfCards[0])
         setIsDealing(true)
     }
 
@@ -99,7 +143,19 @@ const GameSnap = () => {
         playerHasSnapped = false
         setTimeout(() => {
             setIsDealing(true)
-            setDisplayedCard(deckOfCards[currentCardIndex])
+            if(currentCardIndex % 2 === 0){
+                setDisplayedCard1(deckOfCards[currentCardIndex])
+                setTimeout(() => {
+                    setCard1Styling("above")
+                    setCard2Styling("below")
+                }, 200)
+            } else {
+               setDisplayedCard2(deckOfCards[currentCardIndex]) 
+               setTimeout(() => {
+                setCard2Styling("above")
+                setCard1Styling("below")
+            }, 200)
+            }
         }, 1000)
         
     }
@@ -126,7 +182,10 @@ const GameSnap = () => {
 
             <button onClick={() => handleStartGame()}>Start Game</button>
             {/* {deckOfCards.length > 0 && <img src={ deckOfCards[currentCard].image} alt={currentCard.code}/>} */}
-            {displayedCard && <img className={imageSize} src={ displayedCard.image} alt={displayedCard.code}/>}
+            <div className="cards-container">
+            {displayedCard1 && <img  id="card1" className={card1Styling + " " + imageSize + " card1"} src={ displayedCard1.image} alt={displayedCard1.code}/>}
+            {displayedCard2 && <img id="card2" className={card2Styling + " " + imageSize + " card2"} src={ displayedCard2.image} alt={displayedCard2.code}/>}
+            </div>
             <button  disabled={!isDealing} onClick={() => handlePlayerSnap(currentCardIndex)}>Snap</button>
             <button onClick={() => handleContinue()}>Continue</button>
             <p>Player Score: {playerScore}</p>
