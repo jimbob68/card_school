@@ -83,11 +83,14 @@ const GameSnap = () => {
                 setDisplayedCard1(deckOfCards[currentCardIndex])
                 // setCard1Styling("above")
                 // setCard2Styling("below")
-                setC1(React.createElement(
-                    "img",
-                    {src:deckOfCards[currentCardIndex].image, id:"car1", className:imageSize + " card1", style:{zIndex: currentCardIndex}},
-                    null
-                ))
+                setTimeout(() => { 
+                    setC1(React.createElement(
+                        "img",
+                        {src:deckOfCards[currentCardIndex].image, id:"car1", className:imageSize + " card1", style:{zIndex: currentCardIndex}},
+                        null
+                    )) 
+                }, 50)
+                
                 // document.getElementById("car1").style.zIndex = 1
                 // document.getElementById("car2").style.zIndex = 0
                 // setTimeout(() => {
@@ -106,11 +109,13 @@ const GameSnap = () => {
                 setDisplayedCard2(deckOfCards[currentCardIndex])
                 // setCard2Styling("above")
                 // setCard1Styling("below")
-                setC2(React.createElement(
-                    "img",
-                    {src:deckOfCards[currentCardIndex].image, id:"car2", className:imageSize + " card2b", style:{zIndex: currentCardIndex}},
-                    null
-                ))
+                setTimeout(() => { 
+                    setC2(React.createElement(
+                        "img",
+                        {src:deckOfCards[currentCardIndex].image, id:"car2", className:imageSize + " card2b", style:{zIndex: currentCardIndex}},
+                        null
+                    ))
+                    }, 50)
                 // document.getElementById("car1").style.zIndex = 0
                 // document.getElementById("car2").style.zIndex = 1
                 // setTimeout(() => {
@@ -202,12 +207,14 @@ const GameSnap = () => {
                     document.getElementById("card2").style.zIndex = 0
                 }, 200)
 
-
-                setC1(React.createElement(
-                    "img",
-                    {src:deckOfCards[currentCardIndex].image, id:"car1", className:imageSize + " card1", style:{zIndex: currentCardIndex}},
-                    null
-                ))
+                setTimeout(() => {
+                    setC1(React.createElement(
+                        "img",
+                        {src:deckOfCards[currentCardIndex].image, id:"car1", className:imageSize + " card1", style:{zIndex: currentCardIndex}},
+                        null
+                    ))
+                }, 50)
+                
             } else {
                setDisplayedCard2(deckOfCards[currentCardIndex]) 
                setTimeout(() => {
@@ -217,12 +224,13 @@ const GameSnap = () => {
                     document.getElementById("card1").style.zIndex = 0
                 }, 200)
 
-
-                setC2(React.createElement(
-                    "img",
-                    {src:deckOfCards[currentCardIndex].image, id:"car2", className:imageSize + " card2b", style:{zIndex: currentCardIndex}},
-                    null
-                ))
+                setTimeout(() => {
+                    setC2(React.createElement(
+                        "img",
+                        {src:deckOfCards[currentCardIndex].image, id:"car2", className:imageSize + " card2b", style:{zIndex: currentCardIndex}},
+                        null
+                    ))
+                }, 50)
             }
         }, 1000)
         
@@ -259,6 +267,7 @@ const GameSnap = () => {
             <p>Player Score: {playerScore}</p>
             <p>Computer Score: {computerScore}</p>
             <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+            <p>NEW WAY</p>
             <div className="cards-container">
                 {c1}
                 {c2}
