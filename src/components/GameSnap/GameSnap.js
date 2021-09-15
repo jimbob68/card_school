@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import './GameSnap.css';
 
@@ -15,6 +16,8 @@ const GameSnap = () => {
     const [ numberOfDecks, setNumberOfDecks ] = useState(1)
     const [ card1Styling, setCard1Styling ] = useState("above")
     const [ card2Styling, setCard2Styling ] = useState("below")
+    const [ c1 , setC1 ] = useState(null)
+    const [ c2 , setC2 ] = useState(null)
 
     useEffect(() => {
         fetchDecks()
@@ -78,6 +81,15 @@ const GameSnap = () => {
         if(isDealing){
             if(currentCardIndex % 2 === 0){
                 setDisplayedCard1(deckOfCards[currentCardIndex])
+                // setCard1Styling("above")
+                // setCard2Styling("below")
+                setC1(React.createElement(
+                    "img",
+                    {src:deckOfCards[currentCardIndex].image, id:"car1", className:imageSize + " card1", style:{zIndex: currentCardIndex}},
+                    null
+                ))
+                // document.getElementById("car1").style.zIndex = 1
+                // document.getElementById("car2").style.zIndex = 0
                 // setTimeout(() => {
                 //     setCard1Styling("above")
                 //     setCard2Styling("below")
@@ -92,6 +104,15 @@ const GameSnap = () => {
                 console.log("current card index CARD1", currentCardIndex)
             }else {
                 setDisplayedCard2(deckOfCards[currentCardIndex])
+                // setCard2Styling("above")
+                // setCard1Styling("below")
+                setC2(React.createElement(
+                    "img",
+                    {src:deckOfCards[currentCardIndex].image, id:"car2", className:imageSize + " card2b", style:{zIndex: currentCardIndex}},
+                    null
+                ))
+                // document.getElementById("car1").style.zIndex = 0
+                // document.getElementById("car2").style.zIndex = 1
                 // setTimeout(() => {
                 //     setCard2Styling("above")
                 //     setCard1Styling("below")
@@ -104,6 +125,35 @@ const GameSnap = () => {
             }
         }
     }, [currentCardIndex])
+
+    useEffect(() => {
+        if(deckOfCards.length > 0 && currentCardIndex > 0) {
+            if(currentCardIndex % 2 === 0){
+                setC1(React.createElement(
+                    "img",
+                    {src:deckOfCards[currentCardIndex].image, id:"car1", className:imageSize + " card1", style:{zIndex: currentCardIndex}},
+                    null
+                ))
+                setC2(React.createElement(
+                    "img",
+                    {src:deckOfCards[currentCardIndex - 1].image, id:"car2", className:imageSize + " card2b", style:{zIndex: currentCardIndex}},
+                    null
+                ))
+            } else {
+                setC1(React.createElement(
+                    "img",
+                    {src:deckOfCards[currentCardIndex - 1].image, id:"car1", className:imageSize + " card1", style:{zIndex: currentCardIndex}},
+                    null
+                ))
+                setC2(React.createElement(
+                    "img",
+                    {src:deckOfCards[currentCardIndex].image, id:"car2", className:imageSize + " card2b", style:{zIndex: currentCardIndex}},
+                    null
+                ))
+            }
+        }
+
+    }, [imageSize])
 
     const handleComputerSnap = (cardIndex) => {
         const pointsWon = cardIndex - (computerScore + playerScore)
@@ -146,15 +196,33 @@ const GameSnap = () => {
             if(currentCardIndex % 2 === 0){
                 setDisplayedCard1(deckOfCards[currentCardIndex])
                 setTimeout(() => {
-                    setCard1Styling("above")
-                    setCard2Styling("below")
+                    // setCard1Styling("above")
+                    // setCard2Styling("below")
+                    document.getElementById("card1").style.zIndex = 1
+                    document.getElementById("card2").style.zIndex = 0
                 }, 200)
+
+
+                setC1(React.createElement(
+                    "img",
+                    {src:deckOfCards[currentCardIndex].image, id:"car1", className:imageSize + " card1", style:{zIndex: currentCardIndex}},
+                    null
+                ))
             } else {
                setDisplayedCard2(deckOfCards[currentCardIndex]) 
                setTimeout(() => {
-                setCard2Styling("above")
-                setCard1Styling("below")
-            }, 200)
+                    // setCard2Styling("above")
+                    // setCard1Styling("below")
+                    document.getElementById("card2").style.zIndex = 1
+                    document.getElementById("card1").style.zIndex = 0
+                }, 200)
+
+
+                setC2(React.createElement(
+                    "img",
+                    {src:deckOfCards[currentCardIndex].image, id:"car2", className:imageSize + " card2b", style:{zIndex: currentCardIndex}},
+                    null
+                ))
             }
         }, 1000)
         
@@ -165,13 +233,13 @@ const GameSnap = () => {
             <p>Snap</p>
 
             <select value={imageSize} onChange={(event) => {
-				
-				setImageSize(event.target.value)}}>
-				<option selected="selected" value={"medium-snap"}>Card size</option>
-				<option value={"small-snap"}>small</option>
-				<option value={"medium-snap"}>medium</option>
-				<option value={"large-snap"}>large</option>
-			</select>
+                
+                setImageSize(event.target.value)}}>
+                <option selected="selected" value={"medium-snap"}>Card size</option>
+                <option value={"small-snap"}>small</option>
+                <option value={"medium-snap"}>medium</option>
+                <option value={"large-snap"}>large</option>
+            </select>
 
             <select value={numberOfDecks} onChange={(event) => {setNumberOfDecks(event.target.value)}}>
                 <option value={1}>No. of decks</option>
@@ -190,6 +258,11 @@ const GameSnap = () => {
             <button onClick={() => handleContinue()}>Continue</button>
             <p>Player Score: {playerScore}</p>
             <p>Computer Score: {computerScore}</p>
+            <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+            <div className="cards-container">
+                {c1}
+                {c2}
+            </div>
         </div>
     )
 }

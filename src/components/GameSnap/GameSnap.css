@@ -14,13 +14,15 @@
 
 .cards-container img {
 	position: absolute;
-	
 }
 .card1 {
 	left: 0px;
 }
 .card2 {
 	left: 100px;
+}
+.card2b {
+	left: 50px;
 }
 .above {
 	z-index: 1;
