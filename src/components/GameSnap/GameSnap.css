@@ -1,27 +1,95 @@
+.snap-game-container {
+  text-align: center;
+  background-color:darkslateblue;
+  color: white;
+  min-height: 100vh;
+}
+.snap-game-container select{
+	margin: 0 5px;
+}
+
 .small-snap {
 	width: 100px;
+}
+.small-snap.card2 {
+	left: -30px;
 }
 
 .medium-snap {
 	width: 150px;
 }
+
+.snap-buttons {
+	background-color: rgb(236, 164, 69);
+	border-radius: 4px;
+	color: black;
+	padding: 5px;
+	cursor: pointer;
+	font-weight: bold;
+	border: solid 1px black
+
+}
+
+
+
+.snap-start-button {
+	margin-top: 20px;
+}
+
+.snap-snap-button {
+	margin-right: 10px;
+}
+
+.snap-buttons:disabled{
+	background-color: blanchedalmond;
+	color: lightslategray;
+	font-weight: normal;
+}
+
+/* .snap-continue-button:disabled {
+	background-color: blanchedalmond;
+	color: lightslategray;
+} */
+
+.snap-continue-button {
+
+}
+
+.medium-snap.card2 {
+	left: -45px;
+}
 .large-snap {
 	width: 200px;
 }
+
+.large-snap.card2 {
+	left: -60px;
+}
 .cards-container {
 	position: relative;
+	height: fit-content;
+	width: 100%;
+	margin: 20px auto;
 }
 
 .cards-container img {
-	position: absolute;
+	position: relative;
 	
 }
-.card1 {
-	left: 0px;
-}
-.card2 {
-	left: 100px;
-}
+.small-snap.card1 {
+	left: 30px; 
+ }
+
+ .medium-snap.card1 {
+	 left: 45px;
+ }
+
+ .large-snap.card1 {
+	 left: 60px;
+ }
+/* .card2 {
+	left: 50px; 
+ } */
 .above {
 	z-index: 1;
 }

@@ -37,8 +37,10 @@ const GameSnap = () => {
                 setTimeout(() => {
             //         setCard1Styling("above")
             //         setCard2Styling("below")
-                    document.getElementById("card1").style.zIndex = 1
-                    document.getElementById("card2").style.zIndex = 0
+                    if(document.getElementById("card2")){
+                        document.getElementById("card1").style.zIndex = 1
+                        document.getElementById("card2").style.zIndex = 0
+                    }
                 }, 200)
             }else {
                 setTimeout(() => {
@@ -106,7 +108,7 @@ const GameSnap = () => {
     }, [currentCardIndex])
 
     const handleComputerSnap = (cardIndex) => {
-        const pointsWon = cardIndex - (computerScore + playerScore)
+        const pointsWon = (cardIndex + 1) - (computerScore + playerScore)
         if(deckOfCards[cardIndex].value === deckOfCards[cardIndex - 1].value){
             setIsDealing(false)
             setComputerScore(computerScore + pointsWon)
@@ -118,7 +120,6 @@ const GameSnap = () => {
 
     const handleStartGame = () => {
         setDisplayedCard1(deckOfCards[0])
-        setDisplayedCard2(deckOfCards[0])
         setIsDealing(true)
     }
 
@@ -126,7 +127,7 @@ const GameSnap = () => {
     const handlePlayerSnap = (card) => {
         playerHasSnapped = true
         setIsDealing(false)
-        const pointsWon = card - (computerScore + playerScore)
+        const pointsWon = (card + 1) - (computerScore + playerScore)
         if(deckOfCards[card].value === deckOfCards[card -1].value && !computerHasSnapped){
             setPlayerScore(playerScore + pointsWon)
         } else {
@@ -146,14 +147,14 @@ const GameSnap = () => {
             if(currentCardIndex % 2 === 0){
                 setDisplayedCard1(deckOfCards[currentCardIndex])
                 setTimeout(() => {
-                    setCard1Styling("above")
-                    setCard2Styling("below")
+                    document.getElementById("card1").style.zIndex = 1
+                    document.getElementById("card2").style.zIndex = 0
                 }, 200)
             } else {
                setDisplayedCard2(deckOfCards[currentCardIndex]) 
                setTimeout(() => {
-                setCard2Styling("above")
-                setCard1Styling("below")
+                    document.getElementById("card2").style.zIndex = 1
+                    document.getElementById("card1").style.zIndex = 0
             }, 200)
             }
         }, 1000)
@@ -161,11 +162,10 @@ const GameSnap = () => {
     }
 
     return(
-        <div>
-            <p>Snap</p>
+        <div className="snap-game-container">
+            <h1>Snap</h1>
 
             <select value={imageSize} onChange={(event) => {
-				
 				setImageSize(event.target.value)}}>
 				<option selected="selected" value={"medium-snap"}>Card size</option>
 				<option value={"small-snap"}>small</option>
@@ -180,14 +180,15 @@ const GameSnap = () => {
                 <option value={3}>3</option>
             </select>
 
-            <button onClick={() => handleStartGame()}>Start Game</button>
+            <br/>
+            <button className="snap-start-button snap-buttons" onClick={() => handleStartGame()}>Start Game</button>
             {/* {deckOfCards.length > 0 && <img src={ deckOfCards[currentCard].image} alt={currentCard.code}/>} */}
             <div className="cards-container">
-            {displayedCard1 && <img  id="card1" className={card1Styling + " " + imageSize + " card1"} src={ displayedCard1.image} alt={displayedCard1.code}/>}
-            {displayedCard2 && <img id="card2" className={card2Styling + " " + imageSize + " card2"} src={ displayedCard2.image} alt={displayedCard2.code}/>}
+                {displayedCard1 && <img  id="card1" className={card1Styling + " " + imageSize + " card1"} src={ displayedCard1.image} alt={displayedCard1.code}/>}
+                {displayedCard2 && <img id="card2" className={card2Styling + " " + imageSize + " card2"} src={ displayedCard2.image} alt={displayedCard2.code}/>}
             </div>
-            <button  disabled={!isDealing} onClick={() => handlePlayerSnap(currentCardIndex)}>Snap</button>
-            <button onClick={() => handleContinue()}>Continue</button>
+            <button className="snap-snap-button snap-buttons" disabled={!isDealing} onClick={() => handlePlayerSnap(currentCardIndex)}>Snap</button>
+            <button className="snap-continue-button snap-buttons"  disabled={isDealing} onClick={() => handleContinue()}>Continue</button>
             <p>Player Score: {playerScore}</p>
             <p>Computer Score: {computerScore}</p>
         </div>
