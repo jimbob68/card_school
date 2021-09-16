@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './GameSnap.css';
+import Modal from 'react-modal';
+
 
 const GameSnap = () => {
 
@@ -15,6 +17,7 @@ const GameSnap = () => {
     const [ numberOfDecks, setNumberOfDecks ] = useState(1)
     const [ card1Styling, setCard1Styling ] = useState("above")
     const [ card2Styling, setCard2Styling ] = useState("below")
+    const [ endGameModalIsOpen, setEndGameModalIsOpen ] = useState(false)
 
     useEffect(() => {
         fetchDecks()
@@ -26,9 +29,16 @@ const GameSnap = () => {
         .then(results => {
             fetch('https://deckofcardsapi.com/api/deck/' + results.deck_id + '/draw/?count=' + (52 * numberOfDecks))
             .then(res => res.json())
-            .then(results => setDeckOfCards(results.cards))
+            .then(results => {
+                if(currentCardIndex > 0){
+                    setDeckOfCards([...deckOfCards, ...results.cards])
+                } else {
+                    setDeckOfCards(results.cards)
+                }
+            })
         })
     }
+
 
 
     useEffect(() => {       
@@ -53,12 +63,13 @@ const GameSnap = () => {
            setTimeout(() =>{
                 console.log("current card index", currentCardIndex)
                 // if(currentCardIndex < (51 * numberOfDecks)){                               // HOW IT WAS
-                if(currentCardIndex < ((51 * numberOfDecks) + (numberOfDecks - 1))){          // MY FIX
+                if(currentCardIndex < deckOfCards.length - 1){          // MY FIX
                     setCurrentCardIndex(currentCardIndex + 1)
                 } else {
-                    alert("Game over")
+                    setEndGameModalIsOpen(true)
                 }
             }, 1500)
+            // }, 100)
         }
     }, [displayedCard1, displayedCard2])
 
@@ -73,7 +84,8 @@ const GameSnap = () => {
                 handleComputerSnap(currentCardIndex)
             }
         }, snapTime)
-    },[displayedCard1, displayedCard2, isDealing])
+    // },[displayedCard1, displayedCard2, isDealing])
+    },[displayedCard1, displayedCard2])
 
 
     useEffect(() => {
@@ -161,6 +173,26 @@ const GameSnap = () => {
         
     }
 
+    const handleContinueGame = () => {
+        setCurrentCardIndex(currentCardIndex + 1)
+        fetchDecks()
+        setEndGameModalIsOpen(false)
+        setIsDealing(false)
+    }
+
+    const handleResetGame = () => {
+        setDeckOfCards([])
+        setCurrentCardIndex(0)
+        setComputerScore(0)
+        setPlayerScore(0)
+        setNumberOfDecks(1)
+        setIsDealing(false)
+        fetchDecks()
+        setEndGameModalIsOpen(false)
+        setDisplayedCard1(null)
+        setDisplayedCard2(null)
+    }
+
     return(
         <div className="snap-game-container">
             <h1>Snap</h1>
@@ -173,24 +205,30 @@ const GameSnap = () => {
 				<option value={"large-snap"}>large</option>
 			</select>
 
-            <select value={numberOfDecks} onChange={(event) => {setNumberOfDecks(event.target.value)}}>
+            { currentCardIndex === 0 && <select value={numberOfDecks} onChange={(event) => {setNumberOfDecks(event.target.value)}}>
                 <option value={1}>No. of decks</option>
                 <option value={1}>1</option>
                 <option value={2}>2</option>
                 <option value={3}>3</option>
-            </select>
+            </select>}
 
             <br/>
-            <button className="snap-start-button snap-buttons" onClick={() => handleStartGame()}>Start Game</button>
+            { currentCardIndex === 0 && <button className="snap-start-button snap-buttons" onClick={() => handleStartGame()}>Start Game</button>}
             {/* {deckOfCards.length > 0 && <img src={ deckOfCards[currentCard].image} alt={currentCard.code}/>} */}
             <div className="cards-container">
                 {displayedCard1 && <img  id="card1" className={card1Styling + " " + imageSize + " card1"} src={ displayedCard1.image} alt={displayedCard1.code}/>}
                 {displayedCard2 && <img id="card2" className={card2Styling + " " + imageSize + " card2"} src={ displayedCard2.image} alt={displayedCard2.code}/>}
             </div>
-            <button className="snap-snap-button snap-buttons" disabled={!isDealing} onClick={() => handlePlayerSnap(currentCardIndex)}>Snap</button>
-            <button className="snap-continue-button snap-buttons"  disabled={isDealing} onClick={() => handleContinue()}>Continue</button>
+            {currentCardIndex > 0 && <button className="snap-snap-button snap-buttons" disabled={!isDealing} onClick={() => handlePlayerSnap(currentCardIndex)}>Snap</button>}
+            { currentCardIndex > 0 && <button className="snap-continue-button snap-buttons"  disabled={isDealing} onClick={() => handleContinue()}>Continue</button>}
             <p>Player Score: {playerScore}</p>
             <p>Computer Score: {computerScore}</p>
+
+            <Modal className="snap-end-game-modal" overlayClassName="overlay" isOpen={endGameModalIsOpen} appElement={document.getElementById('root')}>
+                <button onClick={() => handleContinueGame()}>Continue Current Game?</button>
+                <button onClick={() => handleResetGame()}>Start New Game</button>
+                Continue Game?</Modal>
+
         </div>
     )
 }
