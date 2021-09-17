@@ -32,6 +32,7 @@
 
 .snap-start-button {
 	margin-top: 20px;
+	
 }
 
 .snap-snap-button {
@@ -86,6 +87,10 @@
 }
 .below {
 	z-index: 0;
+}
+
+.snap-continue-button {
+	visibility: hidden;
 }
 
 @media screen and (max-width: 420px){

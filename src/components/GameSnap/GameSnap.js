@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './GameSnap.css';
 import SnapEndGameModal from './SnapEndGameModal.js'
+import backOfCard from '../../assets/back_of_card.png';
 
 
 
@@ -12,8 +13,8 @@ const GameSnap = ({ setCurrentGame }) => {
     const [ playerScore, setPlayerScore ] = useState(0)
     const [ currentCardIndex, setCurrentCardIndex ] = useState(0)
     const [ isDealing, setIsDealing ] = useState(false)
-    const [ displayedCard1, setDisplayedCard1 ] = useState(null)
-    const [ displayedCard2, setDisplayedCard2 ] = useState(null)
+    const [ displayedCard1, setDisplayedCard1 ] = useState({image:backOfCard})
+    const [ displayedCard2, setDisplayedCard2 ] = useState({image:backOfCard})
     // const [ imageSize, setImageSize ] = useState("medium")       // HOW IT WAS
     const [ imageSize, setImageSize ] = useState("medium-snap")     // MY FIX
     const [ numberOfDecks, setNumberOfDecks ] = useState(1)
@@ -131,6 +132,8 @@ const GameSnap = ({ setCurrentGame }) => {
 
 
     const handleStartGame = () => {
+        document.getElementById("snap-continue-button").style.visibility="visible"
+        document.getElementById("number-of-decks-dropdown").disabled=true
         setDisplayedCard1(deckOfCards[0])
         setIsDealing(true)
     }
@@ -181,6 +184,7 @@ const GameSnap = ({ setCurrentGame }) => {
     }
 
     const handleResetGame = () => {
+        document.getElementById("number-of-decks-dropdown").disabled=false
         setDeckOfCards([])
         setCurrentCardIndex(0)
         setComputerScore(0)
@@ -189,8 +193,8 @@ const GameSnap = ({ setCurrentGame }) => {
         setIsDealing(false)
         fetchDecks()
         setEndGameModalIsOpen(false)
-        setDisplayedCard1(null)
-        setDisplayedCard2(null)
+        setDisplayedCard1({image:backOfCard})
+        setDisplayedCard2({image:backOfCard})
     }
 
     return(
@@ -207,22 +211,22 @@ const GameSnap = ({ setCurrentGame }) => {
 				<option value={"large-snap"}>large</option>
 			</select>
 
-            { currentCardIndex === 0 && <select value={numberOfDecks} onChange={(event) => {setNumberOfDecks(event.target.value)}}>
+            <select id="number-of-decks-dropdown" value={numberOfDecks} onChange={(event) => {setNumberOfDecks(event.target.value)}}>
                 <option value={1}>No. of decks</option>
                 <option value={1}>1</option>
                 <option value={2}>2</option>
                 <option value={3}>3</option>
-            </select>}
+            </select>
 
             <br/>
-            { currentCardIndex === 0 && <button className="snap-start-button snap-buttons" onClick={() => handleStartGame()}>Start Game</button>}
+            <button id="snap-start-button" disabled={currentCardIndex > 0}className="snap-start-button snap-buttons" onClick={() => handleStartGame()}>Start Game</button>
             {/* {deckOfCards.length > 0 && <img src={ deckOfCards[currentCard].image} alt={currentCard.code}/>} */}
             <div className="cards-container">
                 {displayedCard1 && <img  id="card1" className={card1Styling + " " + imageSize + " card1"} src={ displayedCard1.image} alt={displayedCard1.code}/>}
                 {displayedCard2 && <img id="card2" className={card2Styling + " " + imageSize + " card2"} src={ displayedCard2.image} alt={displayedCard2.code}/>}
             </div>
-            {currentCardIndex > 0 && <button className="snap-snap-button snap-buttons" disabled={!isDealing} onClick={() => handlePlayerSnap(currentCardIndex)}>Snap</button>}
-            { currentCardIndex > 0 && <button className="snap-continue-button snap-buttons"  disabled={isDealing} onClick={() => handleContinue()}>Continue</button>}
+             <button className="snap-snap-button snap-buttons" disabled={!isDealing} onClick={() => handlePlayerSnap(currentCardIndex)}>Snap</button>
+            <button className="snap-continue-button snap-buttons" id="snap-continue-button" disabled={isDealing} onClick={() => handleContinue()}>Continue</button>
 
             
             <p>Player Score: {playerScore}</p>
