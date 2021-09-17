@@ -30,7 +30,7 @@ const ResultsModal = (  {
         }
 
     return(
-        <Modal className="modal" overlayClassName="overlay" isOpen={modalIsOpen} appElement={document.getElementById('root')}>
+        <Modal className="twenty-one-results-modal" overlayClassName="twenty-one-overlay" isOpen={modalIsOpen} appElement={document.getElementById('root')}>
             {displayModalTitle()}
         {/* <p><u>Results</u></p> */}
         {/* {resultsState} */}

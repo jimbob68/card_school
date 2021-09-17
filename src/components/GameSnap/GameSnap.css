@@ -30,8 +30,6 @@
 
 }
 
-
-
 .snap-start-button {
 	margin-top: 20px;
 }
@@ -46,13 +44,8 @@
 	font-weight: normal;
 }
 
-/* .snap-continue-button:disabled {
-	background-color: blanchedalmond;
-	color: lightslategray;
-} */
-
-.snap-continue-button {
-
+.snap-home-button {
+	margin-bottom: 15px;
 }
 
 .medium-snap.card2 {
@@ -87,12 +80,37 @@
  .large-snap.card1 {
 	 left: 60px;
  }
-/* .card2 {
-	left: 50px; 
- } */
+
 .above {
 	z-index: 1;
 }
 .below {
 	z-index: 0;
+}
+
+@media screen and (max-width: 420px){
+
+	.medium-snap {
+		width: 130px;
+	}
+
+	.large-snap {
+		width: 160px;
+	}
+
+}
+
+@media screen and (max-width: 320px){
+
+	.medium-snap {
+		width: 120px;
+	}
+
+	.large-snap {
+		width: 140px;
+	}
+	.large-snap.card2 {
+	left: -45px;
+}
+
 }

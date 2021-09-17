@@ -1,0 +1,41 @@
+.snap-modal-button {
+	
+	background-color: rgb(236, 164, 69);
+	border-radius: 4px;
+	color: black;
+	font-size: 16px;
+	padding: 5px;
+	margin: 5px auto 20px auto;
+	
+}
+
+.snap-overlay {
+    background-color: black;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+	z-index: 2;
+}
+
+.snap-end-game-modal {
+	text-align: center;
+    background-color: darkslateblue;
+    color: white;
+    font-size: 18px;
+    padding: 20px;
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    right: 20%;
+    bottom: 20%;
+    overflow: scroll;
+    border-radius: 10px;
+    border: solid 2px white;
+	z-index: 2;
+
+}
+
+
+

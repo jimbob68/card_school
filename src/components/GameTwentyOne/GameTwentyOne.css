@@ -19,9 +19,9 @@
 	width: 100px;
 }
 
-/* img {
+img {
 	width: 100px;
-} */
+}
 
 .hands-container {
 	display: grid;
@@ -79,9 +79,9 @@
 	grid-template-columns: 1fr;
 
 }
-img {
+/* img {
 	width: 60px;
-}
+} */
 
 .player-score-header {
 	

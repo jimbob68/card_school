@@ -1,4 +1,4 @@
-.overlay {
+.twenty-one-overlay {
     background-color: black;
     position: fixed;
     top: 0;
@@ -7,7 +7,7 @@
     bottom: 0;
 }
 
-.modal {
+.twenty-one-results-modal {
     background-color: darkgreen;
     color: white;
     font-size: 18px;

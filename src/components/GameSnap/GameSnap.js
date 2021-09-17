@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './GameSnap.css';
-import Modal from 'react-modal';
+import SnapEndGameModal from './SnapEndGameModal.js'
 
 
-const GameSnap = () => {
+
+
+const GameSnap = ({ setCurrentGame }) => {
 
     const [ deckOfCards, setDeckOfCards ] = useState([])
     const [ computerScore, setComputerScore ] = useState(0)
@@ -38,9 +40,7 @@ const GameSnap = () => {
             })
         })
     }
-
-
-
+    
     useEffect(() => {       
         if(isDealing){
             if(currentCardIndex % 2 === 0){
@@ -196,7 +196,9 @@ const GameSnap = () => {
     return(
         <div className="snap-game-container">
             <h1>Snap</h1>
-
+            
+            <button className="snap-buttons snap-home-button" onClick={() => setCurrentGame("")}>Home</button>
+            <br />
             <select value={imageSize} onChange={(event) => {
 				setImageSize(event.target.value)}}>
 				<option selected="selected" value={"medium-snap"}>Card size</option>
@@ -221,13 +223,12 @@ const GameSnap = () => {
             </div>
             {currentCardIndex > 0 && <button className="snap-snap-button snap-buttons" disabled={!isDealing} onClick={() => handlePlayerSnap(currentCardIndex)}>Snap</button>}
             { currentCardIndex > 0 && <button className="snap-continue-button snap-buttons"  disabled={isDealing} onClick={() => handleContinue()}>Continue</button>}
+
+            
             <p>Player Score: {playerScore}</p>
             <p>Computer Score: {computerScore}</p>
 
-            <Modal className="snap-end-game-modal" overlayClassName="overlay" isOpen={endGameModalIsOpen} appElement={document.getElementById('root')}>
-                <button onClick={() => handleContinueGame()}>Continue Current Game?</button>
-                <button onClick={() => handleResetGame()}>Start New Game</button>
-                Continue Game?</Modal>
+          <SnapEndGameModal  endGameModalIsOpen={endGameModalIsOpen}  setEndGameModalIsOpen={setEndGameModalIsOpen} handleContinueGame={handleContinueGame} handleResetGame={handleResetGame} playerScore={playerScore} computerScore={computerScore} />  
 
         </div>
     )
