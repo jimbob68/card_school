@@ -197,6 +197,7 @@ const GameSnap = ({ setCurrentGame }) => {
         setEndGameModalIsOpen(false)
         setDisplayedCard1({image:backOfCard})
         setDisplayedCard2({image:backOfCard})
+        setDifficultyLevel(1500)
     }
 
     return(
@@ -224,6 +225,7 @@ const GameSnap = ({ setCurrentGame }) => {
                 <option value={2000}>Easy</option>
                 <option value={1500}>Medium</option>
                 <option value={1000}>Hard</option>
+                <option value={800}>Expert</option>
             </select>
             <br/>
             <button id="snap-start-button" disabled={currentCardIndex > 0}className="snap-start-button snap-buttons" onClick={() => handleStartGame()}>Start Game</button>
