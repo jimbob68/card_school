@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './GameSnap.css';
 import SnapEndGameModal from './SnapEndGameModal.js'
 import backOfCard from '../../assets/back_of_card.png';
+import RulesOfSnap from './RulesOfSnap.js'
 
 
 
@@ -15,13 +16,11 @@ const GameSnap = ({ setCurrentGame }) => {
     const [ isDealing, setIsDealing ] = useState(false)
     const [ displayedCard1, setDisplayedCard1 ] = useState({image:backOfCard})
     const [ displayedCard2, setDisplayedCard2 ] = useState({image:backOfCard})
-    // const [ imageSize, setImageSize ] = useState("medium")       // HOW IT WAS
-    const [ imageSize, setImageSize ] = useState("medium-snap")     // MY FIX
+    const [ imageSize, setImageSize ] = useState("medium-snap") 
     const [ numberOfDecks, setNumberOfDecks ] = useState(1)
-    const [ card1Styling, setCard1Styling ] = useState("above")
-    const [ card2Styling, setCard2Styling ] = useState("below")
     const [ endGameModalIsOpen, setEndGameModalIsOpen ] = useState(false)
     const [ difficultyLevel, setDifficultyLevel ] = useState(1500)
+    const [ snapRulesModalIsOpen, setSnapRulesModalIsOpen ] = useState(false)
 
     useEffect(() => {
         fetchDecks()
@@ -40,15 +39,15 @@ const GameSnap = ({ setCurrentGame }) => {
                     setDeckOfCards(results.cards)
                 }
             })
+
         })
+        .catch(err => console.log(err))
     }
     
     useEffect(() => {       
         if(isDealing){
             if(currentCardIndex % 2 === 0){
                 setTimeout(() => {
-            //         setCard1Styling("above")
-            //         setCard2Styling("below")
                     if(document.getElementById("card2")){
                         document.getElementById("card1").style.zIndex = 1
                         document.getElementById("card2").style.zIndex = 0
@@ -56,22 +55,17 @@ const GameSnap = ({ setCurrentGame }) => {
                 }, 200)
             }else {
                 setTimeout(() => {
-            //         setCard2Styling("above")
-            //         setCard1Styling("below")
                     document.getElementById("card2").style.zIndex = 1
                     document.getElementById("card1").style.zIndex = 0
                 }, 200)
             }
            setTimeout(() =>{
-                console.log("current card index", currentCardIndex)
-                // if(currentCardIndex < (51 * numberOfDecks)){                               // HOW IT WAS
-                if(currentCardIndex < deckOfCards.length - 1){          // MY FIX
+                if(currentCardIndex < deckOfCards.length - 1){     
                     setCurrentCardIndex(currentCardIndex + 1)
                 } else {
                     setEndGameModalIsOpen(true)
                 }
             }, difficultyLevel)
-            // }, 100)
         }
     }, [displayedCard1, displayedCard2])
 
@@ -79,15 +73,12 @@ const GameSnap = ({ setCurrentGame }) => {
     let computerHasSnapped = false;
 
     useEffect(() => {
-        // const snapTime = Math.floor(Math.random() * (1400 - 600 + 1)) + 600
         const snapTime = Math.floor(Math.random() * ((difficultyLevel - 100) - (difficultyLevel - (difficultyLevel * 0.4)) + 1)) + (difficultyLevel - (difficultyLevel * 0.4))
-        console.log("SnapTime:", snapTime)
         setTimeout(() => {
             if(currentCardIndex >= 1 && !playerHasSnapped){
                 handleComputerSnap(currentCardIndex)
             }
         }, snapTime)
-    // },[displayedCard1, displayedCard2, isDealing])
     },[displayedCard1, displayedCard2])
 
 
@@ -95,29 +86,16 @@ const GameSnap = ({ setCurrentGame }) => {
         if(isDealing){
             if(currentCardIndex % 2 === 0){
                 setDisplayedCard1(deckOfCards[currentCardIndex])
-                // setTimeout(() => {
-                //     setCard1Styling("above")
-                //     setCard2Styling("below")
-                // }, 200)
-                
                 setTimeout(() => {
                     document.getElementById("card1").style.zIndex = 1
                     document.getElementById("card2").style.zIndex = 0
                 }, 200)
-                
-
-                console.log("current card index CARD1", currentCardIndex)
             }else {
                 setDisplayedCard2(deckOfCards[currentCardIndex])
-                // setTimeout(() => {
-                //     setCard2Styling("above")
-                //     setCard1Styling("below")
-                // }, 200)
                 setTimeout(() => {
                     document.getElementById("card2").style.zIndex = 1
                     document.getElementById("card1").style.zIndex = 0
                 }, 200)
-                console.log("current card index CARD2", currentCardIndex)
             }
         }
     }, [currentCardIndex])
@@ -129,13 +107,12 @@ const GameSnap = ({ setCurrentGame }) => {
             setComputerScore(computerScore + pointsWon)
             computerHasSnapped = true
         }
-        // console.log("cardIndex:", cardIndex)
     }
-
 
     const handleStartGame = () => {
         document.getElementById("snap-continue-button").style.visibility="visible"
         document.getElementById("number-of-decks-dropdown").disabled=true
+        document.getElementById("snap-difficulty-select").disabled=true
         setDisplayedCard1(deckOfCards[0])
         setIsDealing(true)
     }
@@ -150,11 +127,7 @@ const GameSnap = ({ setCurrentGame }) => {
         } else {
             setComputerScore(computerScore + pointsWon)
         }
-        console.log("score:", card - (computerScore + playerScore))
-        console.log("currentCard", deckOfCards[card])
-        console.log("previousCard", deckOfCards[card - 1])
     }
-
 
     const handleContinue = () => {
         computerHasSnapped = false
@@ -172,10 +145,9 @@ const GameSnap = ({ setCurrentGame }) => {
                setTimeout(() => {
                     document.getElementById("card2").style.zIndex = 1
                     document.getElementById("card1").style.zIndex = 0
-            }, 200)
+                }, 200)
             }
-        }, 1000)
-        
+        }, 1000)   
     }
 
     const handleContinueGame = () => {
@@ -187,6 +159,7 @@ const GameSnap = ({ setCurrentGame }) => {
 
     const handleResetGame = () => {
         document.getElementById("number-of-decks-dropdown").disabled=false
+        document.getElementById("snap-difficulty-select").disabled=false
         setDeckOfCards([])
         setCurrentCardIndex(0)
         setComputerScore(0)
@@ -205,6 +178,7 @@ const GameSnap = ({ setCurrentGame }) => {
             <h1>Snap</h1>
             
             <button className="snap-buttons snap-home-button" onClick={() => setCurrentGame("")}>Home</button>
+            <button className="snap-buttons"  onClick={ () => setSnapRulesModalIsOpen(true)}>Rules</button>
             <br />
             <select value={imageSize} onChange={(event) => {
 				setImageSize(event.target.value)}}>
@@ -215,12 +189,12 @@ const GameSnap = ({ setCurrentGame }) => {
 			</select>
 
             <select id="number-of-decks-dropdown" value={numberOfDecks} onChange={(event) => {setNumberOfDecks(event.target.value)}}>
-                <option value={1}>No. of decks</option>
+                <option value={1}>Decks</option>
                 <option value={1}>1</option>
                 <option value={2}>2</option>
                 <option value={3}>3</option>
             </select>
-            <select className="difficulty-select" value={difficultyLevel} onChange={(event) => {setDifficultyLevel(event.target.value)}}>
+            <select id="snap-difficulty-select" className="snap-difficulty-select" value={difficultyLevel} onChange={(event) => {setDifficultyLevel(event.target.value)}}>
                 <option value={1500}>Difficulty Level</option>
                 <option value={2000}>Easy</option>
                 <option value={1500}>Medium</option>
@@ -228,20 +202,20 @@ const GameSnap = ({ setCurrentGame }) => {
                 <option value={800}>Expert</option>
             </select>
             <br/>
-            <button id="snap-start-button" disabled={currentCardIndex > 0}className="snap-start-button snap-buttons" onClick={() => handleStartGame()}>Start Game</button>
-            {/* {deckOfCards.length > 0 && <img src={ deckOfCards[currentCard].image} alt={currentCard.code}/>} */}
+            <button id="snap-start-button" disabled={currentCardIndex > 0}className="snap-start-button snap-buttons" onClick={() => handleStartGame()}>Start Game</button> 
             <div className="cards-container">
-                {displayedCard1 && <img  id="card1" className={card1Styling + " " + imageSize + " card1"} src={ displayedCard1.image} alt={displayedCard1.code}/>}
-                {displayedCard2 && <img id="card2" className={card2Styling + " " + imageSize + " card2"} src={ displayedCard2.image} alt={displayedCard2.code}/>}
+                {displayedCard1 && <img  id="card1" className={imageSize + " card1"} src={ displayedCard1.image} alt={displayedCard1.code}/>}
+                {displayedCard2 && <img id="card2" className={imageSize + " card2"} src={ displayedCard2.image} alt={displayedCard2.code}/>}
             </div>
              <button className="snap-snap-button snap-buttons" disabled={!isDealing} onClick={() => handlePlayerSnap(currentCardIndex)}>Snap</button>
             <button className="snap-continue-button snap-buttons" id="snap-continue-button" disabled={isDealing} onClick={() => handleContinue()}>Continue</button>
-
-            
+         
             <p>Player Score: {playerScore}</p>
             <p>Computer Score: {computerScore}</p>
 
-          <SnapEndGameModal  endGameModalIsOpen={endGameModalIsOpen}  setEndGameModalIsOpen={setEndGameModalIsOpen} handleContinueGame={handleContinueGame} handleResetGame={handleResetGame} playerScore={playerScore} computerScore={computerScore} />  
+          <SnapEndGameModal  endGameModalIsOpen={endGameModalIsOpen}  setEndGameModalIsOpen={setEndGameModalIsOpen} handleContinueGame={handleContinueGame} handleResetGame={handleResetGame} playerScore={playerScore} computerScore={computerScore} /> 
+
+          <RulesOfSnap snapRulesModalIsOpen={snapRulesModalIsOpen} setSnapRulesModalIsOpen={setSnapRulesModalIsOpen} /> 
 
         </div>
     )

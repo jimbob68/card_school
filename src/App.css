@@ -9,6 +9,9 @@
   margin: 0px;
   padding: 30px;
 }
+li {
+  margin-bottom: 5px;
+}
 
 .menu-button {
   background-color: lightsteelblue;
@@ -20,6 +23,14 @@
   font-size: 18px;
   cursor: pointer;
 }
+
+@media screen and (max-width: 420px) {
+  ol {
+    padding-left: 20px;
+  }
+}
+
+
 
 
 

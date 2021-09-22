@@ -7,7 +7,7 @@ const SnapEndGameModal = ({ endGameModalIsOpen, setEndGameModalIsOpen, handleCon
 
     return(
         
-        <Modal className="snap-end-game-modal" overlayClassName="snap-overlay" isOpen={endGameModalIsOpen} appElement={document.getElementById('root')}>
+        <Modal className="snap-end-game-modal snap-modal" overlayClassName="snap-overlay" isOpen={endGameModalIsOpen} appElement={document.getElementById('root')}>
                 
                 <p>Player Score: {playerScore}</p>
                 <p>Computer Score: {computerScore}</p>

@@ -10,7 +10,7 @@ const RulesOfTwentyOne = ({ rulesModalIsOpen, setRulesModalIsOpen }) => {
         }
 
     return(
-        <Modal className="modal" overlayClassName="overlay" isOpen={rulesModalIsOpen} appElement={document.getElementById("root")}>
+        <Modal className="twenty-one-results-modal" overlayClassName="twenty-one-overlay" isOpen={rulesModalIsOpen} appElement={document.getElementById("root")}>
             <div>
                 <p>Rules of Twenty-One</p>
                 <ol>

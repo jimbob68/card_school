@@ -7,64 +7,13 @@ import backOfCard from '../../assets/back_of_card.png';
 import RulesOfTwentyOne from './RulesOfTwentyOne.js';
 
 const GameTwentyOne = ({  setCurrentGame  }) => {
-	let thing = [
-		{
-			code: 'AS',
-			image: 'https://deckofcardsapi.com/static/img/AS.png',
-			images: {
-				svg: 'https://deckofcardsapi.com/static/img/AS.svg',
-				png: 'https://deckofcardsapi.com/static/img/AS.png'
-			},
-			value: 'ACE',
-			suit: 'SPADES'
-		},
-		{
-			code: '5C',
-			image: 'https://deckofcardsapi.com/static/img/5C.png',
-			images: {
-				svg: 'https://deckofcardsapi.com/static/img/5C.svg',
-				png: 'https://deckofcardsapi.com/static/img/5C.png'
-			},
-			value: '5',
-			suit: 'CLUBS'
-		}
-	];
-
-	let otherThing = [
-		{
-			code: '0S',
-			image: 'https://deckofcardsapi.com/static/img/0S.png',
-			images: {
-				svg: 'https://deckofcardsapi.com/static/img/0S.svg',
-				png: 'https://deckofcardsapi.com/static/img/0S.png'
-			},
-			value: '10',
-			suit: 'SPADES'
-		},
-		{
-			code: '0C',
-			image: 'https://deckofcardsapi.com/static/img/0C.png',
-			images: {
-				svg: 'https://deckofcardsapi.com/static/img/0C.svg',
-				png: 'https://deckofcardsapi.com/static/img/0C.png'
-			},
-			value: '10',
-			suit: 'CLUBS'
-		}
-	];
-
 	const [ deckId, setDeckId ] = useState('');
 	const [ deckOfCards, setDeckOfCards ] = useState([]);
 	const [ playerOneHand, setPlayerOneHand ] = useState([]);
 	const [ playerTwoHand, setPlayerTwoHand ] = useState([]);
 	const [ playerThreeHand, setPlayerThreeHand ] = useState([]);
 	const [ playerFourHand, setPlayerFourHand ] = useState([]);
-	// const [ playerOneHand, setPlayerOneHand ] = useState(thing);
-	// const [ playerTwoHand, setPlayerTwoHand ] = useState(thing);
-	// const [ playerThreeHand, setPlayerThreeHand ] = useState(thing);
-	// const [ playerFourHand, setPlayerFourHand ] = useState(thing);
 	const [ computerHand, setComputerHand ] = useState([]);
-	// const [ computerHand, setComputerHand ] = useState(thing);
 	const [ playerNumberTurn, setPlayerNumberTurn ] = useState(1);
 	const [ numberOfPlayers, setNumberOfPlayers ] = useState(0);
 	const [ computerScore, setComputerScore ] = useState(0);
@@ -88,34 +37,28 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 	const [ imageSize, setImageSize ] = useState("medium")
 	const [ dealButtonDisabled, setDealButtonDisabled ] = useState(false)
 	const [  rulesModalIsOpen, setRulesModalIsOpen ] = useState(false)
-	// const [ computerHandLength, setComputerHandLength ] = useState(computerHand.length)
-
 
 	useEffect(() => {
 		if(deckOfCards.length < 52) {
-		fetch('https://deckofcardsapi.com/api/deck/new/shuffle?deck_count=8')
-			.then((res) => res.json())
-			.then((results) => {
-				setDeckId(results.deck_id);
-				console.log('deck info', results);
-				return results.deck_id;
-			})
-			.then((deck_id) => {
-				fetch('https://deckofcardsapi.com/api/deck/' + deck_id + '/draw/?count=416')
-					.then((res) => res.json())
-					.then((results) => setDeckOfCards(results.cards));
-			});
+			fetch('https://deckofcardsapi.com/api/deck/new/shuffle?deck_count=8')
+				.then((res) => res.json())
+				.then((results) => {
+					setDeckId(results.deck_id);
+					console.log('deck info', results);
+					return results.deck_id;
+				})
+				.then((deck_id) => {
+					fetch('https://deckofcardsapi.com/api/deck/' + deck_id + '/draw/?count=416')
+						.then((res) => res.json())
+						.then((results) => setDeckOfCards(results.cards));
+				})
+				.catch(err => console.log(err))
 		}
+		
 	}, [deckOfCards]);
 
 	useEffect(
 		() => {
-			// setTimeout(() => {
-				// if(computerHand.length > 1 && playerNumberTurn === 0){
-				// const dealerDivElement = document.getElementById('dealer-anchor');
-      			// dealerDivElement.scrollIntoView({ behavior: 'smooth' });
-				// }
-
 				if (computerScore < 17 && playerNumberTurn === 0) {
 					setTimeout(() => {
 						let cards = [ ...computerHand ];
@@ -127,10 +70,6 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 						setComputerScore(newScore);
 						let targetElement = document.getElementById('dealer-anchor')
 						setTimeout(() => targetElement.scrollIntoView({ behavior: 'smooth' }), 100)
-						// targetElement.scrollIntoView({ behavior: 'smooth' })
-
-						// setComputerScore(calculateScore(cards));
-						// setComputerHandLength(cards.length)
 					}, 1500);
 
 				} else if (playerNumberTurn === 0) {
@@ -139,10 +78,8 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 						handleEndRound()
 					}, 1500);
 				}
-			// }, 1000);
 		},
 		[ computerScore, playerNumberTurn ]
-		// [ computerHandLength, playerNumberTurn, computerScore ]
 	);
 
 	useEffect(
@@ -375,7 +312,6 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 			setPlayerNumberTurn(playerNumberTurn + 1);
 			targetElement = document.getElementById(playerNumberTurn + 1);
 		}
-		// targetElement.scrollIntoView({ behavior: 'smooth' });
 		setTimeout(() => targetElement.scrollIntoView({ behavior: 'smooth' }), 500)
 		setAreButtonsDisabled(buttonsDisplayed);
 	};
@@ -552,10 +488,6 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		if (computerWins) {
 			resultsVariable.push('Dealer wins!')
 		}
-		// setPlayerOneBet(0);
-		// setPlayerTwoBet(0);
-		// setPlayerThreeBet(0);
-		// setPlayerFourBet(0);
 		setPlayerOneWallet(playerOneBank);
 		setPlayerTwoWallet(playerTwoBank);
 		setPlayerThreeWallet(playerThreeBank);
@@ -602,7 +534,6 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 		setPlayerThreeBet(0)
 		setPlayerFourBet(0)
 		setComputerHand([])
-		// setComputerScore(0)
 		setDeckOfCards([])
 		setAreButtonsDisabled(true)
 		setPlayersSelected(false)
@@ -742,11 +673,8 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				{ numberOfPlayers > 0 && <div className={playerNumberTurn === 0 ? "active-player" : "player-container"}>
 					<p>Dealer</p>
 					{computerHand.length > 0 && displayComputerCards()}
-					{/* {computerHand.length > 0 && calculateScore(computerHand, true)} */}
 					{computerHand.length > 0 && <p id="dealer-anchor" >{calculateScore(computerHand, true)}</p>}
 				</div>}
-
-
 			</div>
 
 			{<ResultsModal 
@@ -754,7 +682,6 @@ const GameTwentyOne = ({  setCurrentGame  }) => {
 				 resultsState={resultsState}
 				 setModalIsOpen={setModalIsOpen}
 				 handleStick={handleStick}
-				//  playerNumber={playerNumber}
 				 playerNumber={playerNumberTurn}
 			/>}
 			<RulesOfTwentyOne  

@@ -24,17 +24,21 @@
 }
 
 .snap-end-game-modal {
-	text-align: center;
+    padding-top: 50px;
+    text-align: center;
+}
+
+.snap-modal {
+	
     background-color: darkslateblue;
     color: white;
     font-size: 18px;
     padding: 20px;
-    padding-top: 50px;
     position: absolute;
-    top: 20%;
-    left: 20%;
-    right: 20%;
-    bottom: 20%;
+    top: 18%;
+    left: 18%;
+    right: 18%;
+    bottom: 18%;
     overflow: scroll;
     border-radius: 10px;
     border: solid 2px white;
@@ -43,15 +47,19 @@
 }
 
 @media screen and (max-width: 420px){
-	.snap-end-game-modal  {
+	.snap-modal   {
         font-size: 18px;
         padding: 10px;
-        padding-top: 100px;
         top: 5%;
         left: 5%;
         right: 5%;
         bottom: 5%;
-   } 
+
+   }
+   
+   .snap-end-game-modal {
+       padding-top: 100px;
+   }
 
 }
 
