@@ -9,6 +9,10 @@
 	
 }
 
+.snap-modal-buttons-container {
+    margin-top: 50px;
+}
+
 .snap-overlay {
     background-color: black;
     position: fixed;
@@ -25,6 +29,7 @@
     color: white;
     font-size: 18px;
     padding: 20px;
+    padding-top: 50px;
     position: absolute;
     top: 20%;
     left: 20%;
@@ -34,6 +39,19 @@
     border-radius: 10px;
     border: solid 2px white;
 	z-index: 2;
+
+}
+
+@media screen and (max-width: 420px){
+	.snap-end-game-modal  {
+        font-size: 18px;
+        padding: 10px;
+        padding-top: 100px;
+        top: 5%;
+        left: 5%;
+        right: 5%;
+        bottom: 5%;
+   } 
 
 }
 

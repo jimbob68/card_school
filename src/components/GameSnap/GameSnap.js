@@ -21,6 +21,7 @@ const GameSnap = ({ setCurrentGame }) => {
     const [ card1Styling, setCard1Styling ] = useState("above")
     const [ card2Styling, setCard2Styling ] = useState("below")
     const [ endGameModalIsOpen, setEndGameModalIsOpen ] = useState(false)
+    const [ difficultyLevel, setDifficultyLevel ] = useState(1500)
 
     useEffect(() => {
         fetchDecks()
@@ -69,7 +70,7 @@ const GameSnap = ({ setCurrentGame }) => {
                 } else {
                     setEndGameModalIsOpen(true)
                 }
-            }, 1500)
+            }, difficultyLevel)
             // }, 100)
         }
     }, [displayedCard1, displayedCard2])
@@ -78,7 +79,8 @@ const GameSnap = ({ setCurrentGame }) => {
     let computerHasSnapped = false;
 
     useEffect(() => {
-        const snapTime = Math.floor(Math.random() * (1400 - 600 + 1)) + 600
+        // const snapTime = Math.floor(Math.random() * (1400 - 600 + 1)) + 600
+        const snapTime = Math.floor(Math.random() * ((difficultyLevel - 100) - (difficultyLevel - (difficultyLevel * 0.4)) + 1)) + (difficultyLevel - (difficultyLevel * 0.4))
         console.log("SnapTime:", snapTime)
         setTimeout(() => {
             if(currentCardIndex >= 1 && !playerHasSnapped){
@@ -217,7 +219,12 @@ const GameSnap = ({ setCurrentGame }) => {
                 <option value={2}>2</option>
                 <option value={3}>3</option>
             </select>
-
+            <select className="difficulty-select" value={difficultyLevel} onChange={(event) => {setDifficultyLevel(event.target.value)}}>
+                <option value={1500}>Difficulty Level</option>
+                <option value={2000}>Easy</option>
+                <option value={1500}>Medium</option>
+                <option value={1000}>Hard</option>
+            </select>
             <br/>
             <button id="snap-start-button" disabled={currentCardIndex > 0}className="snap-start-button snap-buttons" onClick={() => handleStartGame()}>Start Game</button>
             {/* {deckOfCards.length > 0 && <img src={ deckOfCards[currentCard].image} alt={currentCard.code}/>} */}

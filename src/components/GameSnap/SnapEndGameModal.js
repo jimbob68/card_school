@@ -11,11 +11,11 @@ const SnapEndGameModal = ({ endGameModalIsOpen, setEndGameModalIsOpen, handleCon
                 
                 <p>Player Score: {playerScore}</p>
                 <p>Computer Score: {computerScore}</p>
-
-                <button className="snap-modal-button"onClick={() => handleContinueGame()}>Continue Current Game</button>
-                <br/>
-                <button className="snap-modal-button" onClick={() => handleResetGame()}>Start New Game</button>
-
+                <div className="snap-modal-buttons-container">
+                    <button className="snap-modal-button"onClick={() => handleContinueGame()}>Continue Current Game</button>
+                    <br/>
+                    <button className="snap-modal-button" onClick={() => handleResetGame()}>Start New Game</button>
+                </div>
                 </Modal>
     )
 
