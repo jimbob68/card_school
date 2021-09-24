@@ -7,12 +7,20 @@ const NominationWhist = () => {
     const [ numberOfPlayers, setNumberOfPlayers ] = useState(2)
     const [ playerOneHand, setPlayerOneHand ] = useState([])
     const [ playerTwoHand, setPlayerTwoHand ] = useState([])
+    const [ playerThreeHand, setPlayerThreeHand ] = useState([])
+    const [ playerFourHand, setPlayerFourHand ] = useState([])
+    const [ playerFiveHand, setPlayerFiveHand ] = useState([])
+    
     const [ imageSize, setImageSize ] = useState("whist-medium")
     const [ activePlayer, setActivePlayer ] = useState(1)
     const [ cardPot, setCardPot ] = useState([])
     const [ currentRound, setCurrentRound ] = useState(0)
     const [ playerOneScore, setPlayerOneScore ] = useState(0)
     const [ playerTwoScore, setPlayerTwoScore ] = useState(0)
+    const [ playerThreeScore, setPlayerThreeScore ] = useState(0)
+    const [ playerFourScore, setPlayerFourScore ] = useState(0)
+    const [ playerFiveScore, setPlayerFiveScore ] = useState(0)
+    
 
     const trumpSuits = ["CLUBS", "DIAMONDS", "HEARTS", "SPADES", "", "CLUBS", "DIAMONDS", "HEARTS", "SPADES", "" ]
 
@@ -29,16 +37,17 @@ const NominationWhist = () => {
     }, [cardPot])
 
     useEffect(() => {
-        if(playerOneHand.length === 0 && playerTwoHand.length === 0 && currentRound > 0){
+        if(playerOneHand.length === 0 && (playerTwoHand.length === 0) && (playerThreeHand.length === 0) && (playerFourHand.length === 0) && (playerFiveHand.length === 0) && currentRound > 0){
             fetchCards()
             const currentRoundVariable = currentRound 
             
             setTimeout(() => {
                 setCurrentRound(currentRoundVariable + 1)
                 handleDealCards(currentRoundVariable + 1)
+                setCardPot([])
             }, 1000)
         }
-    }, [playerOneHand, playerTwoHand])
+    }, [playerOneHand, playerTwoHand, playerThreeHand, playerFourHand, playerFiveHand])
 
     const fetchCards = () => {
     fetch('https://deckofcardsapi.com/api/deck/new/shuffle?deck_count=1')
@@ -61,7 +70,32 @@ const NominationWhist = () => {
         console.log("currentRound:", currentRound)
         setPlayerOneHand(deck.slice(0, (10 - currentRoundVariable + 1)));
         // setPlayerTwoHand(deck.slice((10 - currentRoundVariable + 1), (20 - currentRoundVariable + 1)))
-        setPlayerTwoHand(deck.slice((10 - currentRoundVariable + 1), (10 - currentRoundVariable + 1) + 10 - currentRoundVariable + 1))
+        // if(numberOfPlayers >= 2){
+        // setPlayerTwoHand(deck.slice((10 - currentRoundVariable + 1), (10 - currentRoundVariable + 1) + 10 - currentRoundVariable + 1))
+        // }
+        // if(numberOfPlayers >= 3){
+        // setPlayerThreeHand(deck.slice((20 - currentRoundVariable + 1), (20 - currentRoundVariable + 1) + 20 - currentRoundVariable + 1))
+        // }
+        // if(numberOfPlayers >= 4){
+        // setPlayerFourHand(deck.slice((30 - currentRoundVariable + 1), (30 - currentRoundVariable + 1) + 30 - currentRoundVariable + 1))
+        // }
+        // if(numberOfPlayers >= 5){
+        // setPlayerFiveHand(deck.slice((40 - currentRoundVariable + 1), (40 - currentRoundVariable + 1) + 40 - currentRoundVariable + 1))
+        // }
+
+        if(numberOfPlayers >= 2){
+        setPlayerTwoHand(deck.slice((10), (20 - currentRoundVariable + 1)))
+        }
+        if(numberOfPlayers >= 3){
+        setPlayerThreeHand(deck.slice((20), (30 - currentRoundVariable + 1)))
+        }
+        if(numberOfPlayers >= 4){
+        setPlayerFourHand(deck.slice((30), (40 - currentRoundVariable + 1)))
+        }
+        if(numberOfPlayers >= 5){
+        setPlayerFiveHand(deck.slice((40), (50 - currentRoundVariable + 1)))
+        }
+
     }
 
     const handleSelectCard = (card, cardIndex) => {
@@ -77,6 +111,22 @@ const NominationWhist = () => {
             playerTwoHand.splice(cardIndex, 1)
             setPlayerTwoHand([...playerTwoHand])
         }
+        else if (activePlayer === 3){
+            card.player = 3
+            playerThreeHand.splice(cardIndex, 1)
+            setPlayerThreeHand([...playerThreeHand])
+        }
+        else if (activePlayer === 4){
+            card.player = 4
+            playerFourHand.splice(cardIndex, 1)
+            setPlayerFourHand([...playerFourHand])
+        }
+        else if (activePlayer === 5){
+            card.player = 5
+            playerFiveHand.splice(cardIndex, 1)
+            setPlayerFiveHand([...playerFiveHand])
+        }
+
         if(activePlayer < numberOfPlayers){
             setActivePlayer(activePlayer + 1)
         } else {
@@ -119,6 +169,18 @@ const NominationWhist = () => {
                 setPlayerTwoScore(playerTwoScore + 1) 
                 setActivePlayer(2)
             }
+            if(highestTrumpCard.player === 3) {
+                setPlayerThreeScore(playerThreeScore + 1) 
+                setActivePlayer(3)
+            }
+            if(highestTrumpCard.player === 4) {
+                setPlayerFourScore(playerFourScore + 1) 
+                setActivePlayer(4)
+            }
+            if(highestTrumpCard.player === 5) {
+                setPlayerFiveScore(playerFiveScore + 1) 
+                setActivePlayer(5)
+            }
         } else {
 
             if(highestSuitCard.player === 1) {
@@ -129,6 +191,18 @@ const NominationWhist = () => {
                 setPlayerTwoScore(playerTwoScore + 1)
                 setActivePlayer(2)
             }
+            if(highestSuitCard.player === 3) {
+                setPlayerThreeScore(playerThreeScore + 1)
+                setActivePlayer(3)
+            }
+            if(highestSuitCard.player === 4) {
+                setPlayerFourScore(playerFourScore + 1)
+                setActivePlayer(4)
+            }
+            if(highestSuitCard.player === 5) {
+                setPlayerFiveScore(playerFiveScore + 1)
+                setActivePlayer(5)
+            }
         }
     }
 
@@ -137,17 +211,42 @@ const NominationWhist = () => {
             return <div className="whist-player-hand">{cardImages}</div>;
     }
 
+    const displayPotCards = (hand, playerNumber) => {
+            const cardImages = hand.map((card, index) => <img className={imageSize} src={card.image} alt={card.code} />);
+            return <div className="whist-player-hand">{cardImages}</div>;
+    }
+
 
     return(
         <div>
             <p>Nomination Whist</p>
+            <select value={numberOfPlayers} onChange={(event) => {
+				setNumberOfPlayers(parseInt(event.target.value))}}>
+				<option value={0}>No. of Players</option>
+				<option value={1}>1</option>
+				<option value={2}>2</option>
+				<option value={3}>3</option>
+				<option value={4}>4</option>
+                <option value={5}>5</option>
+			</select>
+
             <button onClick={() => handleDealCards(1)}>Start Game</button>
-            <p>Active Player: {activePlayer} </p>
+            <p>Active Player: {activePlayer}  Trump Suit: {trumpSuits[currentRound - 1]} Round: {currentRound}</p>
             <p>Player One: {playerOneScore}</p>
             <p>Player Two: {playerTwoScore}</p>
-            {displayCards(cardPot)}
+            <p>Player Three: {playerThreeScore}</p>
+            <p>Player Four: {playerFourScore}</p>
+            <p>Player Five: {playerFiveScore}</p>
+            {displayPotCards(cardPot)}
             {displayCards(playerOneHand)}
             {displayCards(playerTwoHand)}
+            {displayCards(playerThreeHand)}
+            {displayCards(playerFourHand)}
+            {displayCards(playerFiveHand)}
+
+
+
+
         </div>
     )
 }
