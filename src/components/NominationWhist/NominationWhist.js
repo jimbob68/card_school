@@ -20,7 +20,7 @@ const NominationWhist = () => {
     const [ playerThreeScore, setPlayerThreeScore ] = useState(0)
     const [ playerFourScore, setPlayerFourScore ] = useState(0)
     const [ playerFiveScore, setPlayerFiveScore ] = useState(0)
-    
+    const [ currentHandNumber, setCurrentHandNumber ] = useState(1)
 
     const trumpSuits = ["CLUBS", "DIAMONDS", "HEARTS", "SPADES", "", "CLUBS", "DIAMONDS", "HEARTS", "SPADES", "" ]
 
@@ -37,16 +37,7 @@ const NominationWhist = () => {
     }, [cardPot])
 
     useEffect(() => {
-        if(playerOneHand.length === 0 && (playerTwoHand.length === 0) && (playerThreeHand.length === 0) && (playerFourHand.length === 0) && (playerFiveHand.length === 0) && currentRound > 0){
-            fetchCards()
-            const currentRoundVariable = currentRound 
-            
-            setTimeout(() => {
-                setCurrentRound(currentRoundVariable + 1)
-                handleDealCards(currentRoundVariable + 1)
-                setCardPot([])
-            }, 1000)
-        }
+        handleEndRound()
     }, [playerOneHand, playerTwoHand, playerThreeHand, playerFourHand, playerFiveHand])
 
     const fetchCards = () => {
@@ -98,46 +89,77 @@ const NominationWhist = () => {
 
     }
 
-    const handleSelectCard = (card, cardIndex) => {
+    const handleSelectCard = (card, cardIndex, hand) => {
+        let hasSelectedSuit = false
+        let selectedSuit
+        let hasPlayedCard = false
+        if(cardPot.length > 0 && cardPot.length < numberOfPlayers){
+            selectedSuit = cardPot[0].suit
+            hand.forEach(card => {
+                if(card.suit === selectedSuit){
+                    hasSelectedSuit = true
+                }
+            })
+        }
+        if(hand.length <= 10 - currentRound + 1 - currentHandNumber){
+            hasPlayedCard = true
+        }
+        console.log("selected Suit:", selectedSuit)
+        console.log("Has selected Suit:", hasSelectedSuit)
         let cardPotVariable = cardPot
         if(cardPotVariable.length === numberOfPlayers) cardPotVariable = []
-        if(activePlayer === 1){
-            card.player = 1
-            playerOneHand.splice(cardIndex, 1)
-            setPlayerOneHand([...playerOneHand])
-        }
-        else if (activePlayer === 2){
-            card.player = 2
-            playerTwoHand.splice(cardIndex, 1)
-            setPlayerTwoHand([...playerTwoHand])
-        }
-        else if (activePlayer === 3){
-            card.player = 3
-            playerThreeHand.splice(cardIndex, 1)
-            setPlayerThreeHand([...playerThreeHand])
-        }
-        else if (activePlayer === 4){
-            card.player = 4
-            playerFourHand.splice(cardIndex, 1)
-            setPlayerFourHand([...playerFourHand])
-        }
-        else if (activePlayer === 5){
-            card.player = 5
-            playerFiveHand.splice(cardIndex, 1)
-            setPlayerFiveHand([...playerFiveHand])
-        }
+        if(!hasPlayedCard && (card.suit === selectedSuit || !hasSelectedSuit)){
+            if(activePlayer === 1){
+                card.player = 1
+                playerOneHand.splice(cardIndex, 1)
+                setPlayerOneHand([...playerOneHand])
+            }
+            else if (activePlayer === 2){
+                card.player = 2
+                playerTwoHand.splice(cardIndex, 1)
+                setPlayerTwoHand([...playerTwoHand])
+            }
+            else if (activePlayer === 3){
+                card.player = 3
+                playerThreeHand.splice(cardIndex, 1)
+                setPlayerThreeHand([...playerThreeHand])
+            }
+            else if (activePlayer === 4){
+                card.player = 4
+                playerFourHand.splice(cardIndex, 1)
+                setPlayerFourHand([...playerFourHand])
+            }
+            else if (activePlayer === 5){
+                card.player = 5
+                playerFiveHand.splice(cardIndex, 1)
+                setPlayerFiveHand([...playerFiveHand])
+            }
 
-        if(activePlayer < numberOfPlayers){
-            setActivePlayer(activePlayer + 1)
+            if(activePlayer < numberOfPlayers){
+                setActivePlayer(activePlayer + 1)
+            } else {
+                setActivePlayer(1)
+
+            }
+            setCardPot([...cardPotVariable, card])
         } else {
-            setActivePlayer(1)
-
+            alert("Please play " + selectedSuit )
         }
-        setCardPot([...cardPotVariable, card])
     }
 
     
-
+    const handleEndRound = () => {
+        if(playerOneHand.length === 0 && (playerTwoHand.length === 0) && (playerThreeHand.length === 0) && (playerFourHand.length === 0) && (playerFiveHand.length === 0) && currentRound > 0){
+            fetchCards()
+            const currentRoundVariable = currentRound 
+            setCurrentHandNumber(1)
+            setTimeout(() => {
+                setCurrentRound(currentRoundVariable + 1)
+                handleDealCards(currentRoundVariable + 1)
+                setCardPot([])
+            }, 1000)
+        }
+    }
 
 
     const handleEndHand = () => {
@@ -204,10 +226,11 @@ const NominationWhist = () => {
                 setActivePlayer(5)
             }
         }
+        setCurrentHandNumber(currentHandNumber + 1)
     }
 
     const displayCards = (hand, playerNumber) => {
-            const cardImages = hand.map((card, index) => <img onClick={() => handleSelectCard(card, index)} className={imageSize} src={card.image} alt={card.code} />);
+            const cardImages = hand.map((card, index) => <img onClick={() => handleSelectCard(card, index, hand)} className={imageSize} src={card.image} alt={card.code} />);
             return <div className="whist-player-hand">{cardImages}</div>;
     }
 
